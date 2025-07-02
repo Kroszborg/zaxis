@@ -9,6 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'ZAxis - Advanced 3D Component Library | Interactive 3D Development',
   description: 'ZAxis is the most advanced 3D component library for modern web development. Create, customize, and export production-ready Three.js components with real-time visualization, live controls, and instant code generation. Built with React Three Fiber, Next.js, and TypeScript.',
+
   keywords: [
     'ZAxis',
     '3D components',
@@ -30,18 +31,23 @@ export const metadata: Metadata = {
     'WebGL',
     'responsive design'
   ],
+
   authors: [{ name: 'ZAxis Team' }],
   creator: 'ZAxis',
   publisher: 'ZAxis',
+
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
+
   metadataBase: new URL('https://zaxis.dev'),
+
   alternates: {
     canonical: '/',
   },
+
   openGraph: {
     title: 'ZAxis - Advanced 3D Component Library',
     description: 'Create, customize, and export production-ready 3D components with real-time visualization and instant code generation.',
@@ -58,6 +64,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
   },
+
   twitter: {
     card: 'summary_large_image',
     title: 'ZAxis - Advanced 3D Component Library',
@@ -65,6 +72,7 @@ export const metadata: Metadata = {
     images: ['/og-image.jpg'],
     creator: '@zaxis_dev',
   },
+
   robots: {
     index: true,
     follow: true,
@@ -76,10 +84,11 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+
   verification: {
     google: 'your-google-verification-code',
     yandex: 'your-yandex-verification-code',
-  },
+  }
 };
 
 export default function RootLayout({

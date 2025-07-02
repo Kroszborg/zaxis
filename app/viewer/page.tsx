@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useSearchParams } from 'next/navigation';
+import { useEffect } from "react";
+import { useSearchParams } from 'next/navigation';
 import { Navbar } from '@/components/layout/navbar';
 import { ModelViewer } from '@/components/3d/model-viewer';
 import { ControlPanel } from '@/components/customization/control-panel';
