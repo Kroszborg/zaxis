@@ -10,9 +10,6 @@ const nextConfig = {
   images: { unoptimized: true },
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
-  experimental: {
-    esmExternals: false,
-  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
