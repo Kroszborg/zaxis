@@ -1,11 +1,16 @@
-'use client';
+"use client";
 
-import { Suspense, useRef, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, useGLTF } from '@react-three/drei';
-import { useComponentStore } from '@/lib/store';
-import * as THREE from 'three';
-import gsap from 'gsap';
+import { Suspense, useRef, useEffect } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import {
+  OrbitControls,
+  Environment,
+  ContactShadows,
+  useGLTF,
+} from "@react-three/drei";
+import { useComponentStore } from "@/lib/store";
+import * as THREE from "three";
+import gsap from "gsap";
 
 interface ModelProps {
   modelPath: string;
@@ -24,7 +29,7 @@ function Model({ modelPath }: ModelProps) {
         y: customization.scale[1],
         z: customization.scale[2],
         duration: 0.5,
-        ease: 'power2.out',
+        ease: "power2.out",
       });
 
       gsap.to(meshRef.current.rotation, {
@@ -32,7 +37,7 @@ function Model({ modelPath }: ModelProps) {
         y: customization.rotation[1],
         z: customization.rotation[2],
         duration: 0.5,
-        ease: 'power2.out',
+        ease: "power2.out",
       });
 
       gsap.to(meshRef.current.position, {
@@ -40,14 +45,16 @@ function Model({ modelPath }: ModelProps) {
         y: customization.position[1],
         z: customization.position[2],
         duration: 0.5,
-        ease: 'power2.out',
+        ease: "power2.out",
       });
 
       // Apply material properties
       scene.traverse((child) => {
         if (child instanceof THREE.Mesh) {
           if (child.material instanceof THREE.MeshStandardMaterial) {
-            child.material.color.setHex(customization.color.replace('#', '0x'));
+            child.material.color.setHex(
+              parseInt(customization.color.replace("#", "0x"), 16)
+            );
             child.material.metalness = customization.metalness;
             child.material.roughness = customization.roughness;
           }
@@ -90,10 +97,10 @@ interface ModelViewerProps {
   controls?: boolean;
 }
 
-export function ModelViewer({ 
-  modelPath = '/models/default-cube.glb', 
-  className = '',
-  controls = true 
+export function ModelViewer({
+  modelPath = "/models/default-cube.glb",
+  className = "",
+  controls = true,
 }: ModelViewerProps) {
   return (
     <div className={`w-full h-full ${className}`}>
@@ -111,15 +118,15 @@ export function ModelViewer({
           shadow-mapSize-height={2048}
         />
         <pointLight position={[-10, -5, -5]} intensity={0.5} />
-        
+
         <Suspense fallback={<Fallback />}>
-          {modelPath !== '/models/default-cube.glb' ? (
+          {modelPath !== "/models/default-cube.glb" ? (
             <Model modelPath={modelPath} />
           ) : (
             <Fallback />
           )}
         </Suspense>
-        
+
         <ContactShadows
           position={[0, -1.4, 0]}
           opacity={0.75}
@@ -127,10 +134,16 @@ export function ModelViewer({
           blur={2.5}
           far={4}
         />
-        
+
         <Environment preset="studio" />
-        
-        {controls && <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />}
+
+        {controls && (
+          <OrbitControls
+            enablePan={true}
+            enableZoom={true}
+            enableRotate={true}
+          />
+        )}
       </Canvas>
     </div>
   );
