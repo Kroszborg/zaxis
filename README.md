@@ -1,289 +1,245 @@
-# ZAxis - Advanced 3D Component Library
+# ZAxis - 3D Component Library
 
-<div align="center">
-  <img src="https://images.pexels.com/photos/159298/gears-cogs-machine-machinery-159298.jpeg" alt="ZAxis Logo" width="200" height="200" style="border-radius: 20px;">
-  
-  <h3>🚀 The Future of 3D Web Development</h3>
-  
-  [![Next.js](https://img.shields.io/badge/Next.js-13.5-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-  [![React Three Fiber](https://img.shields.io/badge/R3F-8.17-blue?style=for-the-badge&logo=react)](https://docs.pmnd.rs/react-three-fiber)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-5.2-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-  [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.3-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://opensource.org/licenses/MIT)
-</div>
+A modern, performant 3D component library built with Next.js, React Three Fiber, and TypeScript. Features interactive 3D models with real-time customization and code generation.
 
-## 🌟 Overview
+## 🚀 Features
 
-**ZAxis** is a cutting-edge 3D component library that revolutionizes how developers create, customize, and integrate 3D elements into web applications. Built with React Three Fiber, Next.js, and modern web technologies, ZAxis provides an intuitive platform for real-time 3D component visualization and code generation.
+- **Interactive 3D Models**: 20+ pre-built 3D components with realistic materials
+- **Real-time Customization**: Live preview of material, scale, rotation, and position changes
+- **Code Generation**: Automatic React Three Fiber code generation for each component
+- **Performance Optimized**: Memoized components and optimized rendering pipeline
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Modern UI**: Built with shadcn/ui components and Tailwind CSS
 
-### ✨ Key Features
+## 🛠️ Tech Stack
 
-- 🎨 **Real-time 3D Customization** - Live editing of materials, lighting, animations, and effects
-- 🔧 **Instant Code Generation** - Export clean JSX/TSX code with your customizations
-- 🎯 **Production Ready** - Optimized components built for performance and scalability
-- 🌈 **Advanced Materials** - Support for metallic, glass, emissive, and custom materials
-- ⚡ **GSAP Animations** - Smooth, professional animations and micro-interactions
-- 📱 **Responsive Design** - Perfect experience across all devices and screen sizes
-- 🎭 **Dark/Light Themes** - Beautiful themes with seamless switching
-- 🔍 **Component Browser** - Organized library with search and filtering capabilities
+- **Framework**: Next.js 14 with App Router
+- **3D Graphics**: React Three Fiber + Three.js
+- **Animations**: GSAP for smooth transitions
+- **UI Components**: shadcn/ui + Tailwind CSS
+- **State Management**: Zustand for global state
+- **TypeScript**: Full type safety throughout the application
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Node.js 18+ 
-- npm, yarn, or pnpm
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/your-username/zaxis.git
-cd zaxis
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-```
-
-Visit `http://localhost:3000` to see ZAxis in action!
-
-## 🏗️ Project Structure
+## 📁 Project Structure
 
 ```
 zaxis/
-├── app/                    # Next.js App Router
-│   ├── browse/            # Component browser page
-│   ├── viewer/            # 3D component viewer
-│   ├── globals.css        # Global styles and animations
-│   ├── layout.tsx         # Root layout with theme provider
-│   └── page.tsx           # Landing page with hero section
-├── components/
-│   ├── 3d/               # 3D rendering components
-│   │   ├── hero-scene.tsx # Interactive hero 3D scene
-│   │   └── model-viewer.tsx # Main 3D model viewer
-│   ├── customization/    # Control panels and UI
-│   │   ├── control-panel.tsx # Component customization
-│   │   └── hero-control-panel.tsx # Hero scene controls
-│   ├── layout/           # Layout components
-│   │   └── navbar.tsx    # Navigation with theme toggle
-│   ├── theme/            # Theme components
-│   │   └── theme-toggle.tsx # Dark/light mode switch
-│   └── ui/               # Shadcn/ui components
-├── lib/                  # Utilities and stores
-│   ├── code-generator.ts # JSX/TSX code generation
-│   ├── hero-code-generator.ts # Hero scene code export
-│   ├── components-data.ts # Sample component data
-│   ├── store.ts          # Component state management
-│   └── hero-store.ts     # Hero scene state
-├── types/                # TypeScript definitions
-└── public/               # Static assets
-    └── models/           # 3D model files (.glb/.gltf)
+├── src/
+│   ├── app/                    # Next.js App Router pages
+│   │   ├── browse/            # Component browsing page
+│   │   ├── viewer/            # 3D component viewer
+│   │   └── layout.tsx         # Root layout
+│   ├── components/
+│   │   ├── 3d/               # 3D model components
+│   │   │   ├── model-viewer.tsx
+│   │   │   └── hero-scene.tsx
+│   │   ├── customization/    # Customization controls
+│   │   │   ├── control-panel.tsx
+│   │   │   └── hero-control-panel.tsx
+│   │   ├── layout/           # Layout components
+│   │   │   ├── navbar.tsx
+│   │   │   └── footer.tsx
+│   │   ├── ui/               # shadcn/ui components
+│   │   └── theme-provider.tsx
+│   ├── lib/                  # Utility functions and stores
+│   │   ├── store.ts          # Zustand store
+│   │   ├── code-generator.ts # Code generation logic
+│   │   ├── components-data.ts # Component definitions
+│   │   └── utils.ts          # Utility functions
+│   └── types/                # TypeScript type definitions
+├── public/
+│   └── components/           # Component thumbnail images
+└── package.json
 ```
 
-## 🎯 Core Features
+## 🎯 Performance Optimizations
 
-### 🎨 Real-time 3D Customization
+### Viewer Page Optimizations
+- **Memoized Component Lookup**: Prevents unnecessary recalculations when searching for components
+- **Optimized useEffect Dependencies**: Reduces unnecessary rerenders by tracking only relevant state changes
+- **Memoized Event Handlers**: Prevents recreation of functions on every render
+- **Memoized Code Generation**: Caches generated code to avoid recalculation
 
-ZAxis provides intuitive controls for every aspect of 3D components:
+### 3D Model Optimizations
+- **React.memo**: All 3D components are memoized to prevent unnecessary rerenders
+- **Optimized GSAP Animations**: Smooth transitions with proper cleanup
+- **Efficient Geometry**: Optimized mesh geometries for better performance
+- **Lazy Loading**: Components load only when needed
 
-- **Transform Controls**: Scale, rotation, and position with live preview
-- **Material Properties**: Metalness, roughness, color, and emissive effects
-- **Lighting Setup**: Ambient, directional, and point lights with color control
-- **Animation Settings**: Float speed, rotation speed, and particle effects
-- **Advanced Effects**: Distortion, emissive intensity, and particle systems
+### Store Optimizations
+- **Selective State Updates**: Only update relevant parts of the state
+- **Immutable Updates**: Proper state immutability for better performance
+- **Minimal Re-renders**: Store structure designed to minimize component updates
 
-### 🔧 Code Generation
+## 🎨 Component Types
 
-Export production-ready code in multiple formats:
+### Basic Shapes
+- **Cube**: Basic 3D cube with customizable materials
+- **Sphere**: Smooth sphere with realistic lighting
+- **Cylinder**: Cylindrical shape with configurable dimensions
+- **Cone**: Conical shape with smooth geometry
+- **Torus**: Ring-shaped geometry with customizable parameters
+- **Plane**: Flat surface for backgrounds and floors
+- **Pyramid**: Triangular pyramid with sharp edges
+- **Capsule**: Rounded capsule shape
 
-```jsx
-// Generated JSX Example
-import { useGLTF } from '@react-three/drei';
-import { useRef, useEffect } from 'react';
+### Technical Components
+- **Hex Bolt**: Detailed bolt with hexagonal head and threaded shaft
+- **Door Hinge**: Functional hinge with two plates and center pin
+- **Metal Panel**: Industrial panel with decorative rivets
+- **Gear Assembly**: Interlocking gears with animated rotation
+- **Circuit Board**: Electronic board with glowing traces and components
+- **Ornate Bracket**: Decorative bracket with intricate details
 
-export function CustomBoltComponent() {
-  const { scene } = useGLTF('/models/hex-bolt.glb');
-  const meshRef = useRef();
+### Special Effects
+- **Floating Sphere**: Animated sphere with hover effects
+- **Geometric Cube**: Complex cube with wireframe overlay
+- **Wireframe Sphere**: Transparent sphere with wireframe structure
+- **Text 3D**: Three-dimensional text rendering
+- **Hero Block**: Showcase component with advanced effects
+- **Showcase Card**: Card component with shadow and glow effects
 
-  useEffect(() => {
-    if (meshRef.current) {
-      meshRef.current.scale.set(1.2, 1.2, 1.2);
-      meshRef.current.rotation.set(0, 0.5, 0);
-      // ... material customizations
-    }
-  }, [scene]);
+### Helpers
+- **Directional Light**: Configurable lighting component
+- **Perspective Camera**: Camera controls and positioning
+- **Grid Helper**: Reference grid for 3D space
+- **Axes Helper**: Coordinate system visualization
 
-  return <primitive ref={meshRef} object={scene} />;
-}
-```
+## 🔧 Customization Options
 
-### 🌈 Theme System
-
-ZAxis includes a sophisticated theme system:
-
-- **Dark Mode**: Deep blacks with vibrant accents
-- **Light Mode**: Clean whites with subtle shadows
-- **Smooth Transitions**: Animated theme switching
-- **System Preference**: Automatic theme detection
-
-## 🛠️ Technology Stack
-
-| Technology | Purpose | Version |
-|------------|---------|---------|
-| **Next.js** | React framework with App Router | 13.5+ |
-| **React Three Fiber** | React renderer for Three.js | 8.17+ |
-| **@react-three/drei** | Useful helpers for R3F | 9.114+ |
-| **Three.js** | 3D graphics library | 0.169+ |
-| **GSAP** | Professional animations | 3.12+ |
-| **Tailwind CSS** | Utility-first CSS framework | 3.3+ |
-| **Shadcn/ui** | Beautiful UI components | Latest |
-| **Zustand** | State management | 5.0+ |
-| **TypeScript** | Type safety | 5.2+ |
-
-## 📖 Usage Examples
-
-### Basic Component Integration
-
-```tsx
-import { ModelViewer } from '@/components/3d/model-viewer';
-
-export function MyComponent() {
-  return (
-    <div className="h-96">
-      <ModelViewer 
-        modelPath="/models/hex-bolt.glb"
-        controls={true}
-        className="w-full h-full"
-      />
-    </div>
-  );
-}
-```
-
-### Custom Hero Scene
-
-```tsx
-import { HeroScene } from '@/components/3d/hero-scene';
-
-export function CustomHero() {
-  return (
-    <section className="h-screen">
-      <HeroScene />
-    </section>
-  );
-}
-```
-
-### Component Browser Integration
-
-```tsx
-import { ComponentCard } from '@/components/ui/component-card';
-import { sampleComponents } from '@/lib/components-data';
-
-export function ComponentGrid() {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {sampleComponents.map((component) => (
-        <ComponentCard key={component.id} component={component} />
-      ))}
-    </div>
-  );
-}
-```
-
-## 🎨 Customization Guide
-
-### Adding New Components
-
-1. **Create 3D Model**: Export as `.glb` or `.gltf` format
-2. **Add to Data**: Update `lib/components-data.ts`
-3. **Configure Materials**: Define available material options
-4. **Set Defaults**: Specify default scale, rotation, and position
+Each 3D component supports the following customization parameters:
 
 ```typescript
-// Example component definition
-{
-  id: 'custom-gear',
-  name: 'Custom Gear',
-  description: 'Precision-engineered mechanical gear',
-  category: 'mechanical',
-  tags: ['gear', 'mechanical', 'precision'],
-  modelPath: '/models/custom-gear.glb',
-  thumbnailPath: 'https://example.com/thumbnail.jpg',
-  defaultScale: [1, 1, 1],
-  defaultRotation: [0, 0, 0],
-  materials: ['steel', 'aluminum', 'brass'],
-  complexity: 'medium',
-  downloadCount: 0,
-  rating: 5.0,
+interface ComponentCustomization {
+  scale: [number, number, number];      // X, Y, Z scale factors
+  rotation: [number, number, number];   // X, Y, Z rotation in radians
+  position: [number, number, number];   // X, Y, Z position
+  color: string;                        // Material color (hex)
+  metalness: number;                    // Metalness factor (0-1)
+  roughness: number;                    // Roughness factor (0-1)
+  emissiveIntensity: number;           // Glow intensity (0-1)
+  animationSpeed: number;              // Animation speed multiplier
+  particleCount: number;               // Number of particles (if applicable)
+  distortion: number;                  // Distortion effect (0-1)
 }
 ```
 
-### Theme Customization
+## 🚀 Getting Started
 
-Modify `app/globals.css` to customize the color scheme:
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
 
-```css
-:root {
-  --background: 0 0% 3%;
-  --foreground: 0 0% 98%;
-  --primary: 217.2 91.2% 59.8%;
-  --accent: 262.1 83.3% 57.8%;
-  /* ... other variables */
-}
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/zaxis.git
+cd zaxis
 ```
 
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
+2. Install dependencies:
 ```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
+npm install
 ```
 
-### Netlify
+3. Run the development server:
+```bash
+npm run dev
+```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Building for Production
 
 ```bash
-# Build the project
 npm run build
-
-# Deploy to Netlify
-# Upload the 'out' folder to Netlify
+npm start
 ```
 
-### Docker
+## 📖 Usage
 
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-COPY . .
-RUN npm run build
-EXPOSE 3000
-CMD ["npm", "start"]
-```
+### Browsing Components
+1. Navigate to `/browse` to see all available components
+2. Use the search bar to filter components by name
+3. Filter by category, complexity, or materials
+4. Click on any component to view it in the 3D viewer
+
+### Customizing Components
+1. Select a component in the viewer
+2. Switch to the "Customize" tab
+3. Use the control panel to adjust:
+   - Scale, rotation, and position
+   - Material properties (color, metalness, roughness)
+   - Animation and effect parameters
+4. See real-time updates in the 3D preview
+
+### Generating Code
+1. Customize your component as desired
+2. Switch to the "Code" tab
+3. Copy the generated React Three Fiber code
+4. Use the code in your own projects
+
+### Exporting Configurations
+1. Customize a component to your liking
+2. Click the "Export" button in the header
+3. Download the JSON configuration file
+4. Import the configuration later to restore your settings
+
+## 🎯 Performance Guidelines
+
+### For Developers
+- **Use React.memo**: Wrap components that receive stable props
+- **Optimize useEffect**: Only include necessary dependencies
+- **Memoize Expensive Operations**: Use useMemo for calculations
+- **Callback Memoization**: Use useCallback for event handlers
+- **Lazy Loading**: Load components only when needed
+
+### For 3D Models
+- **Efficient Geometries**: Use appropriate geometry types
+- **Material Optimization**: Reuse materials when possible
+- **Animation Cleanup**: Properly dispose of GSAP animations
+- **Texture Management**: Optimize texture sizes and formats
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**3D Models Not Loading**
+- Check browser WebGL support
+- Ensure Three.js dependencies are installed
+- Verify component type exists in the switch statement
+
+**Performance Issues**
+- Reduce polygon count for complex models
+- Optimize material properties
+- Check for memory leaks in animations
+
+**Code Generation Errors**
+- Verify component type is supported
+- Check customization object structure
+- Ensure all required properties are present
+
+### Browser Support
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-### Development Setup
-
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes
-4. Run tests: `npm test`
-5. Commit changes: `git commit -m 'Add amazing feature'`
-6. Push to branch: `git push origin feature/amazing-feature`
-7. Open a Pull Request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Adding New Components
+1. Create the 3D model component in `src/components/3d/model-viewer.tsx`
+2. Add the component to the `Component3D` switch statement
+3. Update `src/lib/components-data.ts` with component metadata
+4. Add thumbnail image to `public/components/`
+5. Test the component thoroughly
 
 ## 📄 License
 
@@ -291,22 +247,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) - Amazing React renderer for Three.js
-- [Three.js](https://threejs.org/) - The foundation of 3D web graphics
-- [Shadcn/ui](https://ui.shadcn.com/) - Beautiful and accessible UI components
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- [GSAP](https://greensock.com/gsap/) - Professional animation library
+- [React Three Fiber](https://github.com/pmndrs/react-three-fiber) for 3D rendering
+- [Three.js](https://threejs.org/) for WebGL graphics
+- [GSAP](https://greensock.com/gsap/) for animations
+- [shadcn/ui](https://ui.shadcn.com/) for UI components
+- [Tailwind CSS](https://tailwindcss.com/) for styling
 
 ## 📞 Support
 
-- 📧 Email: support@zaxis.dev
-- 💬 Discord: [Join our community](https://discord.gg/zaxis)
-- 🐛 Issues: [GitHub Issues](https://github.com/your-username/zaxis/issues)
-- 📖 Documentation: [docs.zaxis.dev](https://docs.zaxis.dev)
+For support and questions:
+- Create an issue on GitHub
+- Check the documentation
+- Review the troubleshooting section
 
 ---
 
-<div align="center">
-  <p>Made with ❤️ by the ZAxis team</p>
-  <p>⭐ Star us on GitHub if you find ZAxis useful!</p>
-</div>
+Built with ❤️ using Next.js, React Three Fiber, and modern web technologies.

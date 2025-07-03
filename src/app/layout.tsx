@@ -31,15 +31,15 @@ export const metadata: Metadata = {
     "WebGL",
     "responsive design",
   ],
-  authors: [{ name: "ZAxis Team" }],
-  creator: "ZAxis",
-  publisher: "ZAxis",
+  authors: [{ name: "kroszborg" }],
+  creator: "kroszborg",
+  publisher: "kroszborg",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://zaxis.dev"),
+  metadataBase: new URL("https://zaxis.kroszborg.co/"),
   alternates: {
     canonical: "/",
   },
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     title: "ZAxis - Advanced 3D Component Library",
     description:
       "Create, customize, and export production-ready 3D components with real-time visualization and instant code generation.",
-    url: "https://zaxis.dev",
+    url: "https://zaxis.kroszborg.co/",
     siteName: "ZAxis",
     images: [
       {
@@ -107,8 +107,6 @@ export default function RootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          enableSystem={true}
-          disableTransitionOnChange={false}
         >
           {children}
           <Toaster />

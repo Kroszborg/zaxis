@@ -1,483 +1,393 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { HeroScene } from '@/components/3d/hero-scene';
-import { HeroControlPanel } from '@/components/customization/hero-control-panel';
-import { Navbar } from '@/components/layout/navbar';
-import { 
-  ArrowRight, 
-  Box, 
-  Palette, 
-  Code, 
-  Sparkles, 
-  Zap, 
-  Download, 
-  Users, 
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { HeroScene } from "@/components/3d/hero-scene";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
+import {
+  ArrowRight,
+  Box,
+  Palette,
+  Code,
+  Sparkles,
+  Zap,
+  Download,
   Star,
   Play,
   CheckCircle,
   Layers,
   Cpu,
-  Workflow,
-  Settings
-} from 'lucide-react';
-import { componentCategories } from '@/lib/components-data';
-import gsap from 'gsap';
+  Building2,
+  Shapes,
+} from "lucide-react";
+import { componentCategories, sampleComponents } from "@/lib/components-data";
+import { HeroControlPanel } from "@/components/customization/hero-control-panel";
+import { useTheme } from "next-themes";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+
+const categoryIcons = {
+  mechanical: Zap,
+  decorative: Sparkles,
+  structural: Building2,
+  electronic: Cpu,
+  geometric: Shapes,
+};
 
 export default function HomePage() {
-  const [showControls, setShowControls] = useState(false);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-  const featuresRef = useRef<HTMLDivElement>(null);
-  const categoriesRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    const tl = gsap.timeline();
-    
-    // Hero animation
-    tl.fromTo(heroRef.current, 
-      { opacity: 0, y: 60 },
-      { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }
-    )
-    // Stats animation
-    .fromTo(statsRef.current,
-      { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
-      '-=0.6'
-    )
-    // Features stagger
-    .fromTo(featuresRef.current?.children || [],
-      { opacity: 0, y: 30, scale: 0.95 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.15, ease: 'back.out(1.7)' },
-      '-=0.4'
-    )
-    // Categories animation
-    .fromTo(categoriesRef.current?.children || [],
-      { opacity: 0, y: 20, rotateX: 15 },
-      { opacity: 1, y: 0, rotateX: 0, duration: 0.5, stagger: 0.1, ease: 'power2.out' },
-      '-=0.3'
-    )
-    // CTA animation
-    .fromTo(ctaRef.current,
-      { opacity: 0, scale: 0.9 },
-      { opacity: 1, scale: 1, duration: 0.8, ease: 'elastic.out(1, 0.8)' },
-      '-=0.2'
-    );
-
-    // Floating animation for feature cards
-    gsap.to('.floating-card', {
-      y: -10,
-      duration: 2,
-      ease: 'power1.inOut',
-      yoyo: true,
-      repeat: -1,
-      stagger: 0.5
-    });
+    setMounted(true);
   }, []);
+  const logoSrc =
+    mounted && resolvedTheme === "dark" ? "/dlogo.png" : "/Llogo.png";
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen">
       <Navbar />
-      
-      {/* Background Grid */}
-      <div className="hero-grid fixed inset-0 pointer-events-none" />
-      
-      {/* Hero Section */}
-      <section className="relative py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="grid lg:grid-cols-2 gap-16 items-center mb-16">
-            <div ref={heroRef} className="space-y-10">
-              <div className="space-y-6">
-                <Badge className="bg-gradient-to-r from-primary/20 to-accent/20 border-primary/30 text-primary-foreground px-4 py-2">
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  ZAxis - Next-Gen 3D Library
-                </Badge>
-                
-                <h1 className="text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
-                  Build with{' '}
-                  <span className="gradient-text block">
-                    Interactive 3D
-                  </span>
-                  Components
-                </h1>
-                
-                <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-2xl">
-                  ZAxis is the most advanced 3D component library for modern web development. 
-                  Visualize, customize, and export production-ready Three.js components 
-                  with real-time controls and instant code generation.
-                </p>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-6">
-                <Link href="/browse">
-                  <Button size="lg" className="w-full sm:w-auto text-lg px-8 py-4 glow-primary group btn-glow">
-                    <Play className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform" />
-                    Start Building
-                    <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-                <Link href="/viewer">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 border-primary/30 hover:border-primary/60">
-                    <Box className="mr-3 h-5 w-5" />
-                    Live Demo
-                  </Button>
-                </Link>
-              </div>
-              
-              {/* Stats */}
-              <div ref={statsRef} className="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-8">
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-bold gradient-text">50+</div>
-                  <div className="text-muted-foreground">Components</div>
-                </div>
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-bold gradient-text">25k+</div>
-                  <div className="text-muted-foreground">Downloads</div>
-                </div>
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-bold gradient-text">4.9★</div>
-                  <div className="text-muted-foreground">Rating</div>
-                </div>
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-bold gradient-text">1.2k+</div>
-                  <div className="text-muted-foreground">Developers</div>
-                </div>
-              </div>
+
+      {/* Enhanced background elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-primary/5 to-blue-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl animate-pulse delay-500" />
+      </div>
+
+      <main className="relative min-h-screen flex flex-col">
+        {/* HERO SECTION */}
+        <section className="relative flex flex-col items-center justify-center min-h-screen w-full px-4">
+          <div className="absolute inset-0 z-0 bg-gradient-to-br from-background via-blue-100/40 to-primary/10 dark:from-background dark:via-blue-900/40 dark:to-primary/30" />
+          <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-4xl mx-auto py-16 md:py-24">
+            {/* Theme-based logo */}
+            <div className="mb-8 flex justify-center">
+              {mounted && (
+                <Image
+                  src={logoSrc}
+                  alt="ZAxis Logo"
+                  width={320}
+                  height={320}
+                  className="object-contain drop-shadow-xl"
+                  priority
+                />
+              )}
             </div>
-            
-            <div className="h-96 lg:h-[600px] relative">
-              <HeroScene />
-              {/* Floating elements */}
-              <div className="absolute top-10 right-10 floating-card">
-                <div className="glass-morphism p-4 rounded-lg">
-                  <Code className="h-6 w-6 text-primary" />
-                </div>
-              </div>
-              <div className="absolute bottom-20 left-10 floating-card">
-                <div className="glass-morphism p-4 rounded-lg">
-                  <Palette className="h-6 w-6 text-accent" />
-                </div>
-              </div>
-              <div className="absolute top-1/2 right-0 floating-card">
-                <div className="glass-morphism p-4 rounded-lg">
-                  <Zap className="h-6 w-6 text-yellow-400" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Interactive Demo Section */}
-          <div className="mt-20">
-            <div className="text-center mb-12">
-              <Badge className="mb-6 bg-gradient-to-r from-accent/20 to-primary/20 border-accent/30">
-                <Settings className="h-4 w-4 mr-2" />
-                Interactive Demo
-              </Badge>
-              <h2 className="text-3xl lg:text-5xl font-bold mb-6">
-                Customize in{' '}
-                <span className="gradient-text">Real-Time</span>
-              </h2>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
-                Experience the power of live 3D customization. Modify colors, lighting, 
-                animations, and effects in real-time, then export the code instantly.
-              </p>
-              
-              <Button
-                onClick={() => setShowControls(!showControls)}
-                size="lg"
-                className="mb-8 btn-glow"
-              >
-                <Settings className="h-5 w-5 mr-2" />
-                {showControls ? 'Hide' : 'Show'} Live Controls
-              </Button>
-            </div>
-
-            {/* Control Panel */}
-            {showControls && (
-              <div className="max-w-4xl mx-auto">
-                <HeroControlPanel />
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <Badge className="mb-6 bg-gradient-to-r from-accent/20 to-primary/20 border-accent/30">
-              <Workflow className="h-4 w-4 mr-2" />
-              Powerful Features
-            </Badge>
-            <h2 className="text-4xl lg:text-6xl font-bold mb-6">
-              Everything You Need to{' '}
-              <span className="gradient-text">Create</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Professional-grade tools designed for developers and designers who demand 
-              the best in 3D web development
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold gradient-text mb-6 leading-tight text-center drop-shadow-lg">
+              Build with <span className="text-primary">3D</span>
+            </h1>
+            <p className="text-2xl lg:text-3xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed text-center">
+              Minimal, production-ready 3D components for your next project.
+              <br />
+              Visualize, customize, and export Three.js code instantly.
             </p>
-          </div>
-          
-          <div ref={featuresRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="glass-morphism hover-glow floating-card group card-hover">
-              <CardContent className="p-8 text-center space-y-4">
-                <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Box className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold">Real-time 3D Rendering</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Powered by Three.js and React Three Fiber for smooth, 
-                  interactive 3D experiences with 60fps performance.
-                </p>
-                <div className="flex justify-center space-x-2">
-                  <Badge variant="secondary">Three.js</Badge>
-                  <Badge variant="secondary">R3F</Badge>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="glass-morphism hover-glow floating-card group card-hover">
-              <CardContent className="p-8 text-center space-y-4">
-                <div className="mx-auto w-16 h-16 bg-gradient-to-br from-accent to-pink-500 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Palette className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold">Live Customization</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Intuitive controls for materials, colors, scale, and rotation. 
-                  See changes instantly with smooth GSAP animations.
-                </p>
-                <div className="flex justify-center space-x-2">
-                  <Badge variant="secondary">GSAP</Badge>
-                  <Badge variant="secondary">Controls</Badge>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="glass-morphism hover-glow floating-card group card-hover">
-              <CardContent className="p-8 text-center space-y-4">
-                <div className="mx-auto w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Code className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold">Code Generation</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Export clean, production-ready JSX/TSX code with your 
-                  customizations. Copy and paste into any React project.
-                </p>
-                <div className="flex justify-center space-x-2">
-                  <Badge variant="secondary">JSX</Badge>
-                  <Badge variant="secondary">TypeScript</Badge>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="glass-morphism hover-glow floating-card group card-hover">
-              <CardContent className="p-8 text-center space-y-4">
-                <div className="mx-auto w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Download className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold">Export & Share</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Download configurations as JSON, share components with teams, 
-                  and maintain version control of your 3D assets.
-                </p>
-                <div className="flex justify-center space-x-2">
-                  <Badge variant="secondary">JSON</Badge>
-                  <Badge variant="secondary">Share</Badge>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="glass-morphism hover-glow floating-card group card-hover">
-              <CardContent className="p-8 text-center space-y-4">
-                <div className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Layers className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold">Modular Architecture</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Built with scalability in mind. Easy to extend with new 
-                  components and integrate into existing workflows.
-                </p>
-                <div className="flex justify-center space-x-2">
-                  <Badge variant="secondary">Modular</Badge>
-                  <Badge variant="secondary">Scalable</Badge>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="glass-morphism hover-glow floating-card group card-hover">
-              <CardContent className="p-8 text-center space-y-4">
-                <div className="mx-auto w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Cpu className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold">Performance Optimized</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Optimized for performance with efficient rendering, 
-                  lazy loading, and minimal bundle size impact.
-                </p>
-                <div className="flex justify-center space-x-2">
-                  <Badge variant="secondary">Optimized</Badge>
-                  <Badge variant="secondary">Fast</Badge>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Categories Section */}
-      <section className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <Badge className="mb-6 bg-gradient-to-r from-primary/20 to-green-500/20 border-primary/30">
-              <Box className="h-4 w-4 mr-2" />
-              Component Library
-            </Badge>
-            <h2 className="text-4xl lg:text-6xl font-bold mb-6">
-              Explore Our{' '}
-              <span className="gradient-text">Collection</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Carefully crafted 3D components organized by category for easy discovery
-            </p>
-          </div>
-          
-          <div ref={categoriesRef} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {componentCategories.map((category, index) => (
-              <Link key={category.id} href={`/browse?category=${category.id}`}>
-                <Card className="glass-morphism hover-glow cursor-pointer group h-full card-hover">
-                  <CardContent className="p-8 text-center space-y-6">
-                    <div className="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300">
-                      {category.icon === 'Cog' && '⚙️'}
-                      {category.icon === 'Sparkles' && '✨'}
-                      {category.icon === 'Building2' && '🏗️'}
-                      {category.icon === 'Cpu' && '💻'}
-                    </div>
-                    <div className="space-y-3">
-                      <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
-                        {category.name}
-                      </h3>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {category.description}
-                      </p>
-                    </div>
-                    <div className="flex justify-center">
-                      <Badge className="bg-gradient-to-r from-primary/20 to-accent/20 border-primary/30">
-                        {category.count} components
-                      </Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof Section */}
-      <section className="py-20 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Trusted by Developers Worldwide
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Join thousands of developers building the future of 3D web experiences
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="glass-morphism text-center p-8 card-hover">
-              <div className="flex justify-center mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                ))}
-              </div>
-              <p className="text-muted-foreground mb-4">
-                "ZAxis has revolutionized our 3D development workflow. 
-                The code generation feature alone saves us hours every week."
-              </p>
-              <div className="font-semibold">Sarah Chen</div>
-              <div className="text-sm text-muted-foreground">Senior Frontend Developer</div>
-            </Card>
-            
-            <Card className="glass-morphism text-center p-8 card-hover">
-              <div className="flex justify-center mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                ))}
-              </div>
-              <p className="text-muted-foreground mb-4">
-                "The real-time customization and export features are incredible. 
-                Perfect for rapid prototyping and client presentations."
-              </p>
-              <div className="font-semibold">Marcus Rodriguez</div>
-              <div className="text-sm text-muted-foreground">Creative Director</div>
-            </Card>
-            
-            <Card className="glass-morphism text-center p-8 card-hover">
-              <div className="flex justify-center mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                ))}
-              </div>
-              <p className="text-muted-foreground mb-4">
-                "Outstanding performance and beautiful components. 
-                The documentation and examples make it easy to get started."
-              </p>
-              <div className="font-semibold">Alex Thompson</div>
-              <div className="text-sm text-muted-foreground">Lead Developer</div>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section ref={ctaRef} className="py-32 relative">
-        <div className="max-w-5xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <div className="glass-morphism p-16 rounded-3xl glow-primary">
-            <Badge className="mb-8 bg-gradient-to-r from-primary/30 to-accent/30 border-primary/50 text-lg px-6 py-3">
-              <Users className="h-5 w-5 mr-2" />
-              Join the Community
-            </Badge>
-            
-            <h2 className="text-4xl lg:text-6xl font-bold mb-8">
-              Ready to Build the{' '}
-              <span className="gradient-text">Future?</span>
-            </h2>
-            
-            <p className="text-xl lg:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
-              Start creating stunning 3D experiences today. Join thousands of developers 
-              who are already building the next generation of web applications with ZAxis.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-5 justify-center">
               <Link href="/browse">
-                <Button size="lg" className="text-xl px-12 py-6 glow-primary group btn-glow">
-                  <Sparkles className="mr-3 h-6 w-6 group-hover:rotate-12 transition-transform" />
-                  Start Building Now
-                  <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform" />
+                <Button
+                  size="lg"
+                  className="btn-glow text-xl px-10 py-6 bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 shadow-lg shadow-primary/25"
+                >
+                  <Play className="mr-3 h-7 w-7" />
+                  Browse Components
+                  <ArrowRight className="ml-3 h-7 w-7" />
                 </Button>
               </Link>
-              
-              <div className="flex items-center space-x-4 text-muted-foreground">
-                <CheckCircle className="h-5 w-5 text-green-400" />
-                <span>Free to use</span>
-                <CheckCircle className="h-5 w-5 text-green-400" />
-                <span>Open source</span>
-                <CheckCircle className="h-5 w-5 text-green-400" />
-                <span>MIT License</span>
+              <Link href="/viewer">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="text-xl px-10 py-6 border-2 hover:bg-muted/50 hover:border-primary/50 transition-all duration-300"
+                >
+                  <Box className="mr-3 h-7 w-7" />
+                  Live Demo
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* INTERACTIVE EXPERIENCE SECTION */}
+        <section className="px-2 sm:px-6 py-24 md:py-32 bg-gradient-to-br from-muted/30 to-muted/10 dark:from-muted/20 dark:to-muted/5">
+          <div className="max-w-[1600px] mx-auto">
+            <div className="text-center mb-14 md:mb-16">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-4 gradient-text">
+                Interactive Experience
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                See our 3D components in action with real-time customization
+                controls
+              </p>
+            </div>
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 md:gap-16 items-stretch">
+              {/* Left: 3D Component Preview */}
+              <div className="flex flex-col h-full">
+                <div className="text-center xl:text-left mb-6 md:mb-8">
+                  <h3 className="text-3xl font-bold mb-2 gradient-text">
+                    Live 3D Preview
+                  </h3>
+                  <p className="text-lg text-muted-foreground">
+                    Experience our interactive 3D components in real-time with
+                    full customization controls
+                  </p>
+                </div>
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="bg-card/90 dark:bg-card/80 backdrop-blur-md rounded-3xl border border-border/50 shadow-2xl p-6 md:p-8 hover:shadow-3xl transition-all duration-500 group flex-1 flex flex-col justify-center relative overflow-hidden min-h-[420px] md:min-h-[540px] xl:min-h-[600px] xl:max-h-[650px]">
+                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-br from-primary/5 to-blue-500/5 dark:from-primary/20 dark:to-blue-500/20" />
+                    <div className="rounded-2xl flex items-center justify-center border border-border/30 relative overflow-hidden bg-background/80 dark:bg-background/60 w-full mx-auto min-h-[320px] md:min-h-[400px] xl:min-h-[500px] max-w-[800px]">
+                      <HeroScene />
+                      <div className="absolute top-4 right-4 z-10">
+                        <Badge
+                          variant="secondary"
+                          className="bg-primary/10 text-primary border-primary/20 px-4 py-1 text-base rounded-full shadow-md"
+                        >
+                          Interactive
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* Right: Live Editor/Controls */}
+              <div className="flex flex-col h-full">
+                <div className="text-center xl:text-left mb-6 md:mb-8">
+                  <h3 className="text-3xl font-bold mb-2 gradient-text">
+                    Live Controls
+                  </h3>
+                  <p className="text-lg text-muted-foreground">
+                    Customize colors, materials, and properties in real-time
+                    with intuitive controls
+                  </p>
+                </div>
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="bg-card/90 dark:bg-card/80 backdrop-blur-md rounded-3xl border border-border/50 shadow-2xl p-8 md:p-10 hover:shadow-3xl transition-all duration-500 group flex-1 flex flex-col justify-center relative overflow-visible min-h-[500px] md:min-h-[700px] xl:min-h-[800px] max-h-[90vh] w-full xl:w-[650px] 2xl:w-[750px] mx-auto">
+                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-br from-primary/5 to-blue-500/5 dark:from-primary/10 dark:to-blue-500/10" />
+                    <div className="relative z-10 flex flex-col justify-center w-full mx-auto min-w-[320px] md:min-w-[420px] xl:min-w-[520px] max-w-[700px]">
+                      <HeroControlPanel />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* COMPONENT CATEGORIES SECTION */}
+        <section className="py-24 md:py-32 bg-gradient-to-br from-muted/60 to-muted/30 dark:from-muted/40 dark:to-muted/20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16 md:mb-20">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-4 gradient-text">
+                Component Categories
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Explore our diverse collection of 3D components organized by
+                type and complexity
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {componentCategories.map((category) => {
+                const IconComponent =
+                  categoryIcons[category.id as keyof typeof categoryIcons] ||
+                  Sparkles;
+                return (
+                  <Card
+                    key={category.id}
+                    className="card-hover bg-card/80 backdrop-blur-md border border-border/50 shadow-lg hover:shadow-2xl transition-all duration-300 group cursor-pointer"
+                    onClick={() =>
+                      (window.location.href = `/browse?category=${category.id}`)
+                    }
+                  >
+                    <CardHeader className="flex flex-row items-center space-y-0 pb-6">
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <IconComponent className="h-7 w-7 text-primary" />
+                      </div>
+                      <div className="ml-5 flex-1">
+                        <CardTitle className="text-xl group-hover:text-primary transition-colors duration-300">
+                          {category.name}
+                        </CardTitle>
+                        <p className="text-muted-foreground mt-1">
+                          {category.description}
+                        </p>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center justify-end text-sm">
+                        <Badge
+                          variant="secondary"
+                          className="bg-primary/10 text-primary border-primary/20 group-hover:bg-primary/20 transition-colors duration-300"
+                        >
+                          {category.count}
+                        </Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* FEATURED COMPONENTS SECTION */}
+        <section className="py-24 md:py-32">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16 md:mb-20">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-4 gradient-text">
+                Featured Components
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Most popular and highly-rated components from our collection
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {sampleComponents
+                .sort((a, b) => b.rating - a.rating)
+                .slice(0, 6)
+                .map((component) => (
+                  <Card
+                    key={component.id}
+                    className="card-hover bg-card/80 backdrop-blur-md border border-border/50 shadow-lg hover:shadow-2xl transition-all duration-300 group cursor-pointer"
+                    onClick={() =>
+                      (window.location.href = `/viewer?id=${component.id}`)
+                    }
+                  >
+                    <div className="h-56 bg-gradient-to-br from-primary/15 via-blue-500/10 to-purple-500/10 rounded-t-xl flex items-center justify-center relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <Box className="h-20 w-20 text-primary/70 relative z-10 group-hover:scale-110 transition-transform duration-300" />
+                      <div className="absolute top-4 right-4">
+                        <Badge
+                          variant="secondary"
+                          className="bg-primary/10 text-primary border-primary/20"
+                        >
+                          {component.complexity}
+                        </Badge>
+                      </div>
+                    </div>
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="font-semibold text-lg group-hover:text-primary transition-colors duration-300">
+                          {component.name}
+                        </h3>
+                      </div>
+                      <p className="text-muted-foreground mb-4 line-clamp-2">
+                        {component.description}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <Badge
+                            variant="outline"
+                            className="capitalize bg-primary/5 border-primary/20 text-primary"
+                          >
+                            {component.category}
+                          </Badge>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="hover:bg-primary/10 hover:text-primary opacity-0 group-hover:opacity-100 transition-all duration-300"
+                        >
+                          <ArrowRight className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+            </div>
+            {/* View All Button */}
+            <div className="text-center mt-14 md:mt-16">
+              <Link href="/browse">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="text-lg px-8 py-6 border-2 hover:bg-primary/10 hover:border-primary/50 transition-all duration-300"
+                >
+                  View All Components
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Enhanced Features Section */}
+        <section className="py-32 bg-gradient-to-br from-muted/60 to-muted/30 dark:from-muted/40 dark:to-muted/20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-20">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6 gradient-text">
+                Why Choose ZAxis?
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                Everything you need to build amazing 3D experiences
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+              <div className="text-center space-y-6">
+                <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center shadow-lg">
+                  <Palette className="h-10 w-10 text-primary" />
+                </div>
+                <h3 className="text-2xl font-semibold">
+                  Real-time Customization
+                </h3>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  Modify colors, materials, and properties in real-time with
+                  intuitive controls.
+                </p>
+              </div>
+
+              <div className="text-center space-y-6">
+                <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center shadow-lg">
+                  <Code className="h-10 w-10 text-primary" />
+                </div>
+                <h3 className="text-2xl font-semibold">
+                  Instant Code Generation
+                </h3>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  Export production-ready Three.js code with your customizations
+                  applied.
+                </p>
+              </div>
+
+              <div className="text-center space-y-6">
+                <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center shadow-lg">
+                  <Download className="h-10 w-10 text-primary" />
+                </div>
+                <h3 className="text-2xl font-semibold">Ready to Use</h3>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  All components are production-ready with proper TypeScript
+                  support.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Enhanced CTA Section */}
+        <section className="py-32 bg-gradient-to-br from-muted/60 to-muted/30 dark:from-muted/40 dark:to-muted/20 border-t border-border/40">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-4xl lg:text-5xl font-bold mb-8 gradient-text">
+              Ready to Start Building?
+            </h2>
+            <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
+              Explore our collection and start creating amazing 3D experiences
+              today.
+            </p>
+            <Link href="/browse">
+              <Button
+                size="lg"
+                className="btn-glow text-lg px-12 py-8 bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 shadow-xl shadow-primary/25 text-white dark:text-white border-0"
+              >
+                <Play className="mr-3 h-6 w-6" />
+                Browse All Components
+                <ArrowRight className="ml-3 h-6 w-6" />
+              </Button>
+            </Link>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
     </div>
   );
 }
