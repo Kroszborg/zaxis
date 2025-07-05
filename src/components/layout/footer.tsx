@@ -38,12 +38,12 @@ export function Footer() {
   const getLogoSrc = () => {
     if (!mounted) {
       // Show a neutral logo during SSR/hydration
-      return "/llogo.png";
+      return "/Llogo.png";
     }
 
     // Use resolvedTheme for more reliable theme detection
     const currentTheme = resolvedTheme || theme;
-    return currentTheme === "dark" ? "/dlogo.png" : "/llogo.png";
+    return currentTheme === "dark" ? "/dlogo.png" : "/Llogo.png";
   };
 
   return (
