@@ -53,50 +53,22 @@ export function ComponentCard({ component }: ComponentCardProps) {
 
   return (
     <Card className="card-hover group cursor-pointer overflow-hidden border-2 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 h-full flex flex-col">
-      <div className="relative flex-1">
-        {/* Component Image */}
-        <div className="h-48 bg-gradient-to-br from-primary/10 via-primary/5 to-blue-500/5 flex items-center justify-center relative overflow-hidden">
-          {component.thumbnailPath ? (
-            <div className="relative w-full h-full">
-              <img
-                src={component.thumbnailPath}
-                alt={component.name}
-                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-            </div>
-          ) : (
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center">
-              <IconComponent className="h-10 w-10 text-primary" />
-            </div>
-          )}
-
-          {/* Category badge */}
-          <div className="absolute top-4 left-4">
-            <Badge
-              variant="secondary"
-              className="bg-background/80 backdrop-blur-sm border-border/50"
-            >
-              {component.category}
-            </Badge>
-          </div>
-
-          {/* Complexity badge */}
-          <div className="absolute top-4 right-4">
-            <Badge
-              className={`border ${getComplexityColor(component.complexity)}`}
-            >
-              {component.complexity}
-            </Badge>
-          </div>
-        </div>
-      </div>
-
       <CardContent className="p-6 space-y-4 flex-1 flex flex-col">
         <div className="space-y-3 flex-1">
           <h3 className="text-xl font-bold group-hover:text-primary transition-colors duration-300 line-clamp-1">
             {component.name}
           </h3>
+          <Badge
+            variant="secondary"
+            className="bg-background/80 backdrop-blur-sm border-border/50"
+          >
+            {component.category}
+          </Badge>
+          <Badge
+            className={`border ${getComplexityColor(component.complexity)}`}
+          >
+            {component.complexity}
+          </Badge>
           <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 flex-1">
             {component.description}
           </p>
