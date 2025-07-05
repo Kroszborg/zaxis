@@ -64,6 +64,8 @@ export const metadata: Metadata = {
       { url: "/favicon.ico" },
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
     ],
     apple: [
       { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
@@ -79,16 +81,9 @@ export const metadata: Metadata = {
     siteName: "ZAxis",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "https://opengraph.b-cdn.net/production/images/a88d076b-2451-49d1-ab08-c265f7ffc8ef.png?token=X1kNBUErNzamXPCSLU3PEQGl4GpqT3GWZB68ruNvhnQ&height=696&width=1200&expires=33287689268",
         width: 1200,
-        height: 630,
-        alt: "ZAxis - Advanced 3D Component Library with interactive 3D components",
-        type: "image/jpeg",
-      },
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
+        height: 696,
         alt: "ZAxis - Advanced 3D Component Library with interactive 3D components",
         type: "image/png",
       },
@@ -101,7 +96,9 @@ export const metadata: Metadata = {
     title: "ZAxis - Advanced 3D Component Library",
     description:
       "Create, customize, and export production-ready 3D components with real-time visualization and instant code generation.",
-    images: ["/og-image.jpg"],
+    images: [
+      "https://opengraph.b-cdn.net/production/images/a88d076b-2451-49d1-ab08-c265f7ffc8ef.png?token=X1kNBUErNzamXPCSLU3PEQGl4GpqT3GWZB68ruNvhnQ&height=696&width=1200&expires=33287689268",
+    ],
     creator: "@kroszborg",
     site: "@zaxis_dev",
   },
@@ -129,6 +126,7 @@ export const metadata: Metadata = {
     "msapplication-config": "/browserconfig.xml",
     "theme-color": "#1721e0",
     "color-scheme": "dark light",
+    "apple-mobile-web-app-title": "ZAxis",
   },
 };
 
