@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   RotateCcw,
   Copy,
@@ -19,20 +20,155 @@ import {
   Sparkles,
   Eye,
   Settings,
+  Smartphone,
+  Monitor,
 } from "lucide-react";
 import { generateComponentCode } from "@/lib/code-generator";
 import { toast } from "sonner";
 
+// Enhanced material presets with better color options for all component types
 const materialPresets = [
-  { name: "Steel", color: "#6B7280", metalness: 0.8, roughness: 0.2 },
-  { name: "Aluminum", color: "#9CA3AF", metalness: 0.7, roughness: 0.3 },
-  { name: "Brass", color: "#D97706", metalness: 0.9, roughness: 0.1 },
-  { name: "Copper", color: "#DC2626", metalness: 0.9, roughness: 0.1 },
-  { name: "Plastic", color: "#3B82F6", metalness: 0.0, roughness: 0.8 },
-  { name: "Glass", color: "#E0E7FF", metalness: 0.0, roughness: 0.0 },
-  { name: "Gold", color: "#F59E0B", metalness: 1.0, roughness: 0.0 },
-  { name: "Silver", color: "#E5E7EB", metalness: 1.0, roughness: 0.0 },
+  {
+    name: "Steel",
+    color: "#6B7280",
+    metalness: 0.8,
+    roughness: 0.2,
+    category: "metal",
+  },
+  {
+    name: "Aluminum",
+    color: "#9CA3AF",
+    metalness: 0.7,
+    roughness: 0.3,
+    category: "metal",
+  },
+  {
+    name: "Brass",
+    color: "#D97706",
+    metalness: 0.9,
+    roughness: 0.1,
+    category: "metal",
+  },
+  {
+    name: "Copper",
+    color: "#DC2626",
+    metalness: 0.9,
+    roughness: 0.1,
+    category: "metal",
+  },
+  {
+    name: "Gold",
+    color: "#F59E0B",
+    metalness: 1.0,
+    roughness: 0.0,
+    category: "metal",
+  },
+  {
+    name: "Silver",
+    color: "#E5E7EB",
+    metalness: 1.0,
+    roughness: 0.0,
+    category: "metal",
+  },
+  {
+    name: "Plastic",
+    color: "#3B82F6",
+    metalness: 0.0,
+    roughness: 0.8,
+    category: "plastic",
+  },
+  {
+    name: "Glass",
+    color: "#E0E7FF",
+    metalness: 0.0,
+    roughness: 0.0,
+    category: "glass",
+  },
+  {
+    name: "Neon Blue",
+    color: "#00D4FF",
+    metalness: 0.0,
+    roughness: 0.2,
+    category: "emissive",
+  },
+  {
+    name: "Neon Green",
+    color: "#00FF88",
+    metalness: 0.0,
+    roughness: 0.2,
+    category: "emissive",
+  },
+  {
+    name: "Neon Pink",
+    color: "#FF0080",
+    metalness: 0.0,
+    roughness: 0.2,
+    category: "emissive",
+  },
+  {
+    name: "Wood",
+    color: "#8B4513",
+    metalness: 0.0,
+    roughness: 0.9,
+    category: "organic",
+  },
+  {
+    name: "Stone",
+    color: "#6B7280",
+    metalness: 0.0,
+    roughness: 0.8,
+    category: "organic",
+  },
+  {
+    name: "Ceramic",
+    color: "#F3F4F6",
+    metalness: 0.0,
+    roughness: 0.1,
+    category: "ceramic",
+  },
+  {
+    name: "Carbon",
+    color: "#1F2937",
+    metalness: 0.8,
+    roughness: 0.4,
+    category: "carbon",
+  },
+  {
+    name: "Titanium",
+    color: "#9CA3AF",
+    metalness: 0.9,
+    roughness: 0.2,
+    category: "metal",
+  },
 ];
+
+// Component-specific presets
+const componentPresets = {
+  "hex-bolt": ["Steel", "Brass", "Aluminum", "Titanium"],
+  "door-hinge": ["Steel", "Brass", "Copper", "Aluminum"],
+  "metal-panel": ["Aluminum", "Steel", "Titanium", "Carbon"],
+  "gear-assembly": ["Steel", "Brass", "Plastic", "Carbon"],
+  "circuit-board": ["Carbon", "Copper", "Plastic", "Ceramic"],
+  "ornate-bracket": ["Brass", "Gold", "Silver", "Copper"],
+  "floating-sphere": ["Neon Blue", "Neon Green", "Neon Pink", "Glass"],
+  "geometric-cube": ["Glass", "Neon Blue", "Plastic", "Steel"],
+  "wireframe-sphere": ["Neon Blue", "Neon Green", "Neon Pink", "Silver"],
+  cube: ["Plastic", "Steel", "Glass", "Wood"],
+  sphere: ["Plastic", "Steel", "Glass", "Stone"],
+  torus: ["Plastic", "Steel", "Glass", "Ceramic"],
+  cone: ["Plastic", "Steel", "Glass", "Stone"],
+  plane: ["Plastic", "Steel", "Glass", "Wood"],
+  "text-3d": ["Plastic", "Steel", "Glass", "Gold"],
+  "directional-light": ["Neon Blue", "Neon Green", "Neon Pink", "Gold"],
+  "perspective-camera": ["Carbon", "Plastic", "Steel", "Ceramic"],
+  "grid-helper": ["Neon Blue", "Neon Green", "Silver", "Plastic"],
+  "axes-helper": ["Neon Blue", "Neon Green", "Neon Pink", "Silver"],
+  cylinder: ["Plastic", "Steel", "Glass", "Wood"],
+  pyramid: ["Stone", "Glass", "Steel", "Gold"],
+  capsule: ["Plastic", "Steel", "Glass", "Ceramic"],
+  "hero-block": ["Glass", "Steel", "Neon Blue", "Carbon"],
+  "showcase-card": ["Glass", "Steel", "Plastic", "Carbon"],
+};
 
 export function ControlPanel() {
   const {
@@ -41,27 +177,16 @@ export function ControlPanel() {
     updateCustomization,
     resetCustomization,
   } = useComponentStore();
+  const isMobile = useIsMobile();
 
   if (!selectedComponent) {
     return (
-      <Card className="glass-morphism card-hover">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Palette className="h-5 w-5 text-primary" />
-            <span>Select a Component</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center space-y-4">
-            <div className="w-16 h-16 mx-auto bg-muted/30 rounded-full flex items-center justify-center">
-              <Palette className="w-8 h-8 text-muted-foreground" />
-            </div>
-            <p className="text-muted-foreground">
-              Choose a component to start customizing.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center space-y-4">
+          <Eye className="w-12 h-12 text-muted-foreground mx-auto" />
+          <p className="text-muted-foreground">No component selected</p>
+        </div>
+      </div>
     );
   }
 
@@ -105,38 +230,57 @@ export function ControlPanel() {
       metalness: preset.metalness,
       roughness: preset.roughness,
     });
-    toast.success(`Applied ${preset.name} material!`);
+    toast.success(`Applied ${preset.name} material!`, {
+      description: `Color: ${preset.color}, Metalness: ${preset.metalness}, Roughness: ${preset.roughness}`,
+    });
   };
 
+  // Get recommended presets for current component
+  const recommendedPresets =
+    componentPresets[
+      selectedComponent.componentType as keyof typeof componentPresets
+    ] || [];
+  const filteredPresets = materialPresets.filter((preset) =>
+    recommendedPresets.includes(preset.name)
+  );
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Component Header */}
-      <Card className="glass-morphism card-hover">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="flex items-center space-x-2">
-            <Sparkles className="h-5 w-5 text-primary" />
+      <Card className="glass-morphism card-hover border-border/50">
+        <CardHeader className="flex flex-row items-center justify-between pb-3 sm:pb-4 px-4 sm:px-6">
+          <CardTitle className="flex items-center space-x-2 text-sm sm:text-base">
+            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             <span>{selectedComponent.name}</span>
           </CardTitle>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={resetCustomization}
-            className="btn-glow"
-          >
-            <RotateCcw className="h-4 w-4 mr-2" />
-            Reset
-          </Button>
+          <div className="flex items-center gap-2">
+            {isMobile && (
+              <Badge variant="secondary" className="text-xs">
+                <Smartphone className="h-3 w-3 mr-1" />
+                Mobile
+              </Badge>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={resetCustomization}
+              className="btn-glow text-xs"
+            >
+              <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Reset</span>
+            </Button>
+          </div>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between text-sm">
+        <CardContent className="space-y-3 sm:space-y-4 px-4 sm:px-6">
+          <div className="flex items-center justify-between text-xs sm:text-sm">
             <span className="text-muted-foreground">Category:</span>
-            <Badge variant="outline" className="capitalize">
+            <Badge variant="outline" className="capitalize text-xs">
               {selectedComponent.category}
             </Badge>
           </div>
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center justify-between text-xs sm:text-sm">
             <span className="text-muted-foreground">Complexity:</span>
-            <Badge variant="secondary" className="capitalize">
+            <Badge variant="secondary" className="capitalize text-xs">
               {selectedComponent.complexity}
             </Badge>
           </div>
@@ -144,135 +288,135 @@ export function ControlPanel() {
       </Card>
 
       {/* Material Presets */}
-      <Card className="glass-morphism card-hover">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Palette className="h-5 w-5 text-primary" />
+      <Card className="glass-morphism card-hover border-border/50">
+        <CardHeader className="px-4 sm:px-6">
+          <CardTitle className="flex items-center space-x-2 text-sm sm:text-base">
+            <Palette className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             <span>Material Presets</span>
           </CardTitle>
+          <p className="text-xs text-muted-foreground mt-1">
+            Recommended materials for {selectedComponent.name}
+          </p>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-2">
-            {materialPresets.map((preset) => (
+        <CardContent className="px-4 sm:px-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {filteredPresets.map((preset) => (
               <Button
                 key={preset.name}
                 variant="outline"
                 size="sm"
                 onClick={() => applyMaterialPreset(preset)}
-                className="justify-start h-auto p-3 hover-glow"
+                className="justify-start h-auto p-2 sm:p-3 hover-glow text-xs"
               >
                 <div
-                  className="w-4 h-4 rounded mr-2 border"
+                  className="w-3 h-3 sm:w-4 sm:h-4 rounded mr-2 border"
                   style={{ backgroundColor: preset.color }}
                 />
                 <span className="text-xs">{preset.name}</span>
               </Button>
             ))}
           </div>
+
+          <Separator className="my-4" />
+
+          <div className="space-y-2">
+            <Label className="text-xs sm:text-sm font-medium">
+              All Materials
+            </Label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {materialPresets.map((preset) => (
+                <Button
+                  key={preset.name}
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => applyMaterialPreset(preset)}
+                  className="justify-start h-auto p-2 hover-glow text-xs"
+                >
+                  <div
+                    className="w-3 h-3 rounded mr-2 border"
+                    style={{ backgroundColor: preset.color }}
+                  />
+                  <span className="text-xs">{preset.name}</span>
+                </Button>
+              ))}
+            </div>
+          </div>
         </CardContent>
       </Card>
 
       {/* Transform Controls */}
-      <Card className="glass-morphism card-hover">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Move className="h-5 w-5 text-primary" />
+      <Card className="glass-morphism card-hover border-border/50">
+        <CardHeader className="px-4 sm:px-6">
+          <CardTitle className="flex items-center space-x-2 text-sm sm:text-base">
+            <Move className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             <span>Transform</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Scale Controls */}
-          <div className="space-y-3">
-            <Label className="flex items-center space-x-2">
-              <Zap className="h-4 w-4" />
-              <span>Scale</span>
-            </Label>
-            <div className="space-y-3">
-              {(["X", "Y", "Z"] as const).map((axis, index) => (
-                <div key={axis} className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-sm">{axis}</Label>
-                    <span className="text-sm text-muted-foreground w-12 text-right">
-                      {customization.scale[index].toFixed(1)}
-                    </span>
-                  </div>
-                  <Slider
-                    value={[customization.scale[index]]}
-                    onValueChange={([value]) => {
-                      const newScale = [...customization.scale] as [
-                        number,
-                        number,
-                        number
-                      ];
-                      newScale[index] = value;
-                      updateCustomization({ scale: newScale });
-                    }}
-                    min={0.1}
-                    max={3}
-                    step={0.1}
-                    className="w-full"
-                  />
-                </div>
-              ))}
+        <CardContent className="space-y-4 px-4 sm:px-6">
+          {/* Scale */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs sm:text-sm">Scale</Label>
+              <span className="text-xs text-muted-foreground">
+                {customization.scale[0].toFixed(1)}x
+              </span>
+            </div>
+            <Slider
+              value={[customization.scale[0]]}
+              onValueChange={([value]) =>
+                updateCustomization({ scale: [value, value, value] })
+              }
+              min={0.1}
+              max={3}
+              step={0.1}
+              className="w-full"
+            />
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>Small</span>
+              <span>Large</span>
             </div>
           </div>
 
           <Separator />
 
-          {/* Rotation Controls */}
-          <div className="space-y-3">
-            <Label className="flex items-center space-x-2">
-              <RotateIcon className="h-4 w-4" />
-              <span>Rotation</span>
-            </Label>
-            <div className="space-y-3">
-              {(["X", "Y", "Z"] as const).map((axis, index) => (
-                <div key={axis} className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-sm">{axis}</Label>
-                    <span className="text-sm text-muted-foreground w-12 text-right">
-                      {(
-                        (customization.rotation[index] * 180) /
-                        Math.PI
-                      ).toFixed(0)}
-                      °
-                    </span>
-                  </div>
-                  <Slider
-                    value={[customization.rotation[index]]}
-                    onValueChange={([value]) => {
-                      const newRotation = [...customization.rotation] as [
-                        number,
-                        number,
-                        number
-                      ];
-                      newRotation[index] = value;
-                      updateCustomization({ rotation: newRotation });
-                    }}
-                    min={-Math.PI}
-                    max={Math.PI}
-                    step={0.1}
-                    className="w-full"
-                  />
-                </div>
-              ))}
+          {/* Rotation */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs sm:text-sm">Rotation Speed</Label>
+              <span className="text-xs text-muted-foreground">
+                {customization.animationSpeed?.toFixed(1)}x
+              </span>
+            </div>
+            <Slider
+              value={[customization.animationSpeed || 1]}
+              onValueChange={([value]) =>
+                updateCustomization({ animationSpeed: value })
+              }
+              min={0}
+              max={3}
+              step={0.1}
+              className="w-full"
+            />
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>Static</span>
+              <span>Fast</span>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Material Controls */}
-      <Card className="glass-morphism card-hover">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Eye className="h-5 w-5 text-primary" />
+      {/* Material Properties */}
+      <Card className="glass-morphism card-hover border-border/50">
+        <CardHeader className="px-4 sm:px-6">
+          <CardTitle className="flex items-center space-x-2 text-sm sm:text-base">
+            <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             <span>Material Properties</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6">
           {/* Color */}
           <div className="space-y-2">
-            <Label className="text-sm">Color</Label>
+            <Label className="text-xs sm:text-sm">Color</Label>
             <div className="flex items-center space-x-2">
               <Input
                 type="color"
@@ -283,7 +427,7 @@ export function ControlPanel() {
               <Input
                 value={customization.color}
                 onChange={(e) => updateCustomization({ color: e.target.value })}
-                className="flex-1"
+                className="flex-1 text-xs sm:text-sm"
                 placeholder="#000000"
               />
             </div>
@@ -294,8 +438,8 @@ export function ControlPanel() {
           {/* Metalness */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label className="text-sm">Metalness</Label>
-              <span className="text-sm text-muted-foreground">
+              <Label className="text-xs sm:text-sm">Metalness</Label>
+              <span className="text-xs text-muted-foreground">
                 {customization.metalness.toFixed(2)}
               </span>
             </div>
@@ -318,8 +462,8 @@ export function ControlPanel() {
           {/* Roughness */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label className="text-sm">Roughness</Label>
-              <span className="text-sm text-muted-foreground">
+              <Label className="text-xs sm:text-sm">Roughness</Label>
+              <span className="text-xs text-muted-foreground">
                 {customization.roughness.toFixed(2)}
               </span>
             </div>
@@ -338,24 +482,55 @@ export function ControlPanel() {
               <span>Rough</span>
             </div>
           </div>
+
+          {/* Emissive Intensity */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs sm:text-sm">Glow Intensity</Label>
+              <span className="text-xs text-muted-foreground">
+                {customization.emissiveIntensity?.toFixed(2) || "0.20"}
+              </span>
+            </div>
+            <Slider
+              value={[customization.emissiveIntensity || 0.2]}
+              onValueChange={([value]) =>
+                updateCustomization({ emissiveIntensity: value })
+              }
+              min={0}
+              max={2}
+              step={0.1}
+              className="w-full"
+            />
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>None</span>
+              <span>Bright</span>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
       {/* Export Controls */}
-      <Card className="glass-morphism card-hover">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Settings className="h-5 w-5 text-primary" />
+      <Card className="glass-morphism card-hover border-border/50">
+        <CardHeader className="px-4 sm:px-6">
+          <CardTitle className="flex items-center space-x-2 text-sm sm:text-base">
+            <Settings className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             <span>Export</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <Button onClick={handleCopyCode} className="w-full btn-glow">
-            <Copy className="h-4 w-4 mr-2" />
+        <CardContent className="space-y-3 px-4 sm:px-6">
+          <Button
+            onClick={handleCopyCode}
+            className="w-full btn-glow text-xs sm:text-sm"
+          >
+            <Copy className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
             Copy Code
           </Button>
-          <Button variant="outline" onClick={handleExport} className="w-full">
-            <Download className="h-4 w-4 mr-2" />
+          <Button
+            variant="outline"
+            onClick={handleExport}
+            className="w-full text-xs sm:text-sm"
+          >
+            <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
             Export Config
           </Button>
         </CardContent>

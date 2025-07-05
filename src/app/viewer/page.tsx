@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { useComponentStore } from "@/lib/store";
 import { sampleComponents } from "@/lib/components-data";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   ArrowLeft,
   ExternalLink,
@@ -22,6 +23,9 @@ import {
   Code,
   Sparkles,
   RotateCw,
+  Smartphone,
+  Monitor,
+  Palette,
 } from "lucide-react";
 import Link from "next/link";
 import { generateComponentCode } from "@/lib/code-generator";
@@ -38,11 +42,14 @@ import { toast } from "sonner";
  * - 3D model viewing with customization
  * - Code generation and export
  * - Component information display
+ * - Responsive design for mobile and desktop
+ * - Color preset integration
  *
  * Performance optimizations:
  * - Memoized expensive operations
  * - Optimized useEffect dependencies
  * - Callback memoization for event handlers
+ * - Responsive layout optimization
  */
 function ViewerContent() {
   const searchParams = useSearchParams();
@@ -50,6 +57,7 @@ function ViewerContent() {
   const { selectedComponent, customization, setSelectedComponent } =
     useComponentStore();
   const [activeTab, setActiveTab] = useState("viewer");
+  const isMobile = useIsMobile();
 
   // Memoize component lookup to prevent unnecessary recalculations
   const targetComponent = useMemo(() => {
@@ -141,22 +149,22 @@ function ViewerContent() {
   // Loading state while component is being set
   if (!selectedComponent) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center space-y-6">
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-center space-y-6 max-w-md">
           <div className="w-24 h-24 mx-auto bg-muted/20 rounded-full flex items-center justify-center">
             <Eye className="w-12 h-12 text-muted-foreground" />
           </div>
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold gradient-text">
+            <h1 className="text-2xl sm:text-3xl font-bold gradient-text">
               Component Not Found
             </h1>
-            <p className="text-muted-foreground max-w-md">
+            <p className="text-muted-foreground text-sm sm:text-base">
               The component you're looking for doesn't exist or has been
               removed.
             </p>
           </div>
           <Link href="/browse">
-            <Button size="lg" className="btn-glow">
+            <Button size="lg" className="btn-glow w-full sm:w-auto">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Browse
             </Button>
@@ -167,43 +175,55 @@ function ViewerContent() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <Navbar />
 
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
             <Link href="/browse">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="w-full sm:w-auto">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
               </Button>
             </Link>
-            <div>
-              <h1 className="text-2xl font-bold">{selectedComponent.name}</h1>
-              <p className="text-muted-foreground">
+            <div className="text-center sm:text-left">
+              <h1 className="text-lg sm:text-xl lg:text-2xl font-bold">
+                {selectedComponent.name}
+              </h1>
+              <p className="text-xs sm:text-sm lg:text-base text-muted-foreground mt-1">
                 {selectedComponent.description}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" onClick={handleShare}>
+          <div className="flex items-center gap-2 justify-center sm:justify-end">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleShare}
+              className="flex-1 sm:flex-none"
+            >
               <Share2 className="h-4 w-4 mr-2" />
-              Share
+              <span className="hidden sm:inline">Share</span>
             </Button>
-            <Button variant="outline" size="sm" onClick={handleDownload}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleDownload}
+              className="flex-1 sm:flex-none"
+            >
               <Download className="h-4 w-4 mr-2" />
-              Export
+              <span className="hidden sm:inline">Export</span>
             </Button>
           </div>
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="flex flex-wrap gap-2 mb-6 sm:mb-8 justify-center sm:justify-start">
           {selectedComponent.tags.map((tag) => (
-            <Badge key={tag} variant="secondary">
+            <Badge key={tag} variant="secondary" className="text-xs">
               {tag}
             </Badge>
           ))}
@@ -215,41 +235,75 @@ function ViewerContent() {
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
-          className="space-y-6"
+          className="space-y-4 sm:space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="viewer">Viewer</TabsTrigger>
-            <TabsTrigger value="customize">Customize</TabsTrigger>
-            <TabsTrigger value="code">Code</TabsTrigger>
-            <TabsTrigger value="info">Info</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto sm:h-10">
+            <TabsTrigger
+              value="viewer"
+              className="text-xs sm:text-sm py-2 sm:py-1"
+            >
+              <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+              <span className="hidden sm:inline">Viewer</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="customize"
+              className="text-xs sm:text-sm py-2 sm:py-1"
+            >
+              <Palette className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+              <span className="hidden sm:inline">Customize</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="code"
+              className="text-xs sm:text-sm py-2 sm:py-1"
+            >
+              <Code className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+              <span className="hidden sm:inline">Code</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="info"
+              className="text-xs sm:text-sm py-2 sm:py-1"
+            >
+              <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+              <span className="hidden sm:inline">Info</span>
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="viewer" className="space-y-6">
-            <div className="grid lg:grid-cols-1 gap-8">
+          <TabsContent value="viewer" className="space-y-4 sm:space-y-6">
+            <div className="grid lg:grid-cols-1 gap-4 sm:gap-8">
               {/* 3D Viewer */}
               <div>
-                <Card className="card-hover overflow-hidden bg-card/50 backdrop-blur-sm">
-                  <CardHeader className="flex flex-row items-center justify-between pb-4">
-                    <CardTitle className="flex items-center space-x-2">
-                      <Sparkles className="h-5 w-5 text-primary" />
+                <Card className="card-hover overflow-hidden bg-card/50 backdrop-blur-sm border-border/50">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2 sm:pb-4 px-4 sm:px-6">
+                    <CardTitle className="flex items-center space-x-2 text-sm sm:text-base">
+                      <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                       <span>3D Preview</span>
                     </CardTitle>
+                    <div className="flex items-center gap-2">
+                      {isMobile && (
+                        <Badge variant="secondary" className="text-xs">
+                          <Smartphone className="h-3 w-3 mr-1" />
+                          Mobile
+                        </Badge>
+                      )}
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        className="bg-background/80 backdrop-blur-sm border-border/50"
+                        onClick={() => window.location.reload()}
+                      >
+                        <RotateCw className="h-3 w-3 sm:h-4 sm:w-4" />
+                      </Button>
+                    </div>
                   </CardHeader>
                   <CardContent className="p-0">
-                    <div className="h-96 lg:h-[600px]">
+                    <div
+                      className={`${
+                        isMobile ? "h-64 sm:h-80" : "h-80 sm:h-96 lg:h-[600px]"
+                      } relative`}
+                    >
                       <ModelViewer
                         componentType={selectedComponent.componentType}
                       />
-                      <div className="absolute top-4 right-4 flex space-x-2">
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          className="bg-background/80 backdrop-blur-sm border-border/50"
-                          onClick={() => window.location.reload()}
-                        >
-                          <RotateCw className="h-4 w-4" />
-                        </Button>
-                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -257,12 +311,26 @@ function ViewerContent() {
             </div>
           </TabsContent>
 
-          <TabsContent value="customize" className="space-y-6">
-            <div className="grid lg:grid-cols-2 gap-8">
+          <TabsContent value="customize" className="space-y-4 sm:space-y-6">
+            <div
+              className={`grid gap-4 sm:gap-8 ${
+                isMobile ? "grid-cols-1" : "lg:grid-cols-2"
+              }`}
+            >
               <div>
-                <Card className="card-hover bg-card/50 backdrop-blur-sm">
+                <Card className="card-hover bg-card/50 backdrop-blur-sm border-border/50">
+                  <CardHeader className="pb-2 sm:pb-4 px-4 sm:px-6">
+                    <CardTitle className="flex items-center space-x-2 text-sm sm:text-base">
+                      <Monitor className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                      <span>Live Preview</span>
+                    </CardTitle>
+                  </CardHeader>
                   <CardContent className="p-0">
-                    <div className="h-96 lg:h-[500px]">
+                    <div
+                      className={`${
+                        isMobile ? "h-48 sm:h-64" : "h-80 sm:h-96 lg:h-[500px]"
+                      }`}
+                    >
                       <ModelViewer
                         componentType={selectedComponent.componentType}
                       />
@@ -270,22 +338,27 @@ function ViewerContent() {
                   </CardContent>
                 </Card>
               </div>
-              <div>
+              <div className={`${isMobile ? "order-first" : ""}`}>
                 <ControlPanel />
               </div>
             </div>
           </TabsContent>
 
-          <TabsContent value="code" className="space-y-6">
-            <Card className="card-hover bg-card/50 backdrop-blur-sm">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="flex items-center space-x-2">
-                  <Code className="h-5 w-5 text-primary" />
+          <TabsContent value="code" className="space-y-4 sm:space-y-6">
+            <Card className="card-hover bg-card/50 backdrop-blur-sm border-border/50">
+              <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4 sm:px-6">
+                <CardTitle className="flex items-center space-x-2 text-sm sm:text-base">
+                  <Code className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   <span>Generated Code</span>
                 </CardTitle>
-                <div className="flex items-center space-x-2">
-                  <Button variant="outline" size="sm" onClick={handleCopyCode}>
-                    <Copy className="h-4 w-4 mr-2" />
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleCopyCode}
+                    className="flex-1 sm:flex-none"
+                  >
+                    <Copy className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                     Copy
                   </Button>
                   <Button
@@ -297,15 +370,16 @@ function ViewerContent() {
                         "_blank"
                       )
                     }
+                    className="flex-1 sm:flex-none"
                   >
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Docs
+                    <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
+                    <span className="hidden sm:inline">Docs</span>
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="px-4 sm:px-6">
                 <div className="relative">
-                  <pre className="bg-gradient-to-br from-muted/50 to-muted/30 p-6 rounded-lg overflow-x-auto text-sm font-mono border border-border/50">
+                  <pre className="bg-gradient-to-br from-muted/50 to-muted/30 p-3 sm:p-4 lg:p-6 rounded-lg overflow-x-auto text-xs sm:text-sm font-mono border border-border/50 max-h-96 overflow-y-auto">
                     <code className="text-foreground">{generatedCode}</code>
                   </pre>
                   <div className="absolute top-2 right-2">
@@ -321,34 +395,36 @@ function ViewerContent() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="info" className="space-y-6">
-            <div className="grid lg:grid-cols-1 gap-8">
-              <Card className="card-hover bg-card/50 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle>Component Details</CardTitle>
+          <TabsContent value="info" className="space-y-4 sm:space-y-6">
+            <div className="grid lg:grid-cols-1 gap-4 sm:gap-8">
+              <Card className="card-hover bg-card/50 backdrop-blur-sm border-border/50">
+                <CardHeader className="px-4 sm:px-6">
+                  <CardTitle className="text-sm sm:text-base">
+                    Component Details
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-2 gap-4">
+                <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <span className="text-sm text-muted-foreground">
+                      <span className="text-xs sm:text-sm text-muted-foreground">
                         Category:
                       </span>
-                      <div className="font-medium capitalize">
+                      <div className="font-medium capitalize text-sm sm:text-base">
                         {selectedComponent.category}
                       </div>
                     </div>
                     <div>
-                      <span className="text-sm text-muted-foreground">
+                      <span className="text-xs sm:text-sm text-muted-foreground">
                         Complexity:
                       </span>
-                      <div className="font-medium capitalize">
+                      <div className="font-medium capitalize text-sm sm:text-base">
                         {selectedComponent.complexity}
                       </div>
                     </div>
                   </div>
                   <Separator />
                   <div>
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-xs sm:text-sm text-muted-foreground">
                       Materials:
                     </span>
                     <div className="flex flex-wrap gap-2 mt-2">
@@ -364,7 +440,7 @@ function ViewerContent() {
                     </div>
                   </div>
                   <div>
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-xs sm:text-sm text-muted-foreground">
                       Features:
                     </span>
                     <div className="flex flex-wrap gap-2 mt-2">
@@ -381,28 +457,36 @@ function ViewerContent() {
                   </div>
                 </CardContent>
               </Card>
-              <Card className="card-hover bg-card/50 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle>Usage Information</CardTitle>
+              <Card className="card-hover bg-card/50 backdrop-blur-sm border-border/50">
+                <CardHeader className="px-4 sm:px-6">
+                  <CardTitle className="text-sm sm:text-base">
+                    Usage Information
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-4 px-4 sm:px-6">
                   <div className="space-y-2">
-                    <h4 className="font-medium">Installation</h4>
-                    <pre className="bg-gradient-to-br from-muted/50 to-muted/30 p-3 rounded text-sm font-mono border border-border/50">
+                    <h4 className="font-medium text-sm sm:text-base">
+                      Installation
+                    </h4>
+                    <pre className="bg-gradient-to-br from-muted/50 to-muted/30 p-2 sm:p-3 rounded text-xs sm:text-sm font-mono border border-border/50 overflow-x-auto">
                       npm install @react-three/fiber @react-three/drei three
                     </pre>
                   </div>
                   <div className="space-y-2">
-                    <h4 className="font-medium">Dependencies</h4>
-                    <div className="space-y-1 text-sm">
+                    <h4 className="font-medium text-sm sm:text-base">
+                      Dependencies
+                    </h4>
+                    <div className="space-y-1 text-xs sm:text-sm">
                       <div>• React Three Fiber</div>
                       <div>• Three.js</div>
                       <div>• GSAP (for animations)</div>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <h4 className="font-medium">Browser Support</h4>
-                    <div className="space-y-1 text-sm">
+                    <h4 className="font-medium text-sm sm:text-base">
+                      Browser Support
+                    </h4>
+                    <div className="space-y-1 text-xs sm:text-sm">
                       <div>• Chrome 90+</div>
                       <div>• Firefox 88+</div>
                       <div>• Safari 14+</div>
@@ -429,17 +513,22 @@ function ViewerContent() {
  * - Suspense boundary for smooth loading
  * - Error handling for component loading
  * - Performance optimized rendering
+ * - Responsive design support
  */
 export default function ViewerPage() {
   return (
     <div className="min-h-screen">
       <Suspense
         fallback={
-          <div className="min-h-screen flex items-center justify-center">
-            <div className="text-center space-y-4">
+          <div className="min-h-screen flex items-center justify-center p-4">
+            <div className="text-center space-y-4 max-w-md">
               <div className="w-16 h-16 mx-auto border-4 border-primary border-t-transparent rounded-full animate-spin" />
-              <h2 className="text-xl font-semibold">Loading Component...</h2>
-              <p className="text-muted-foreground">Preparing the 3D viewer</p>
+              <h2 className="text-lg sm:text-xl font-semibold">
+                Loading Component...
+              </h2>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                Preparing the 3D viewer
+              </p>
             </div>
           </div>
         }

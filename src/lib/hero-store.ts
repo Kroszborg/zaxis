@@ -64,20 +64,20 @@ const defaultCustomization: HeroCustomization = {
   mainObjectEmissiveIntensity: 0.2,
   mainObjectDistort: 0.3,
   mainObjectSpeed: 2,
-  mainObjectScale: 1.6,
+  mainObjectScale: 2.0,
   
   // Spheres
   sphere1Color: '#8B5CF6',
   sphere1Position: [3, 1, 0],
-  sphere1Scale: 0.45,
+  sphere1Scale: 0.6,
   
   sphere2Color: '#10B981',
   sphere2Position: [-2.5, -1, 1],
-  sphere2Scale: 0.32,
+  sphere2Scale: 0.45,
   
   sphere3Color: '#F59E0B',
   sphere3Position: [1.5, -2, -1],
-  sphere3Scale: 0.25,
+  sphere3Scale: 0.35,
   
   // Lighting
   ambientIntensity: 0.3,

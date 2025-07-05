@@ -22,11 +22,13 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { generateHeroCode } from "@/lib/hero-code-generator";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function HeroControlPanel() {
   const { customization, updateCustomization, resetCustomization } =
     useHeroStore();
   const [codeFormat, setCodeFormat] = useState<"jsx" | "tsx">("tsx");
+  const isMobile = useIsMobile();
 
   const handleCopyCode = () => {
     const code = generateHeroCode(customization, codeFormat);
@@ -59,40 +61,112 @@ export function HeroControlPanel() {
   return (
     <div className="w-full h-full">
       <Tabs defaultValue="object" className="w-full mb-4 h-full">
-        <TabsList className="grid w-full grid-cols-4 rounded-2xl bg-muted/40 p-1 mb-4 sticky top-0 z-20">
-          <TabsTrigger value="object">Object</TabsTrigger>
-          <TabsTrigger value="lights">Lights</TabsTrigger>
-          <TabsTrigger value="effects">Effects</TabsTrigger>
-          <TabsTrigger value="export">Export</TabsTrigger>
+        <TabsList
+          className={`grid w-full grid-cols-4 rounded-xl mb-4 sticky top-0 z-40
+            ${
+              isMobile
+                ? "bg-card border-b border-border shadow-sm p-0 h-12 text-xs"
+                : "bg-muted/40 p-0 text-sm"
+            }`}
+        >
+          <TabsTrigger value="object" className="py-2">
+            Object
+          </TabsTrigger>
+          <TabsTrigger value="lights" className="py-2">
+            Lights
+          </TabsTrigger>
+          <TabsTrigger value="effects" className="py-2">
+            Effects
+          </TabsTrigger>
+          <TabsTrigger value="export" className="py-2">
+            Export
+          </TabsTrigger>
         </TabsList>
-        <Card className="glass-morphism w-full max-w-3xl mx-auto p-0 h-[600px] xl:h-[700px] 2xl:h-[800px] flex flex-col">
-          <CardHeader className="pb-2 px-8 pt-8 flex flex-row items-center justify-between sticky top-0 z-10 bg-card/90 dark:bg-card/80 backdrop-blur-md rounded-t-3xl">
-            <div className="flex items-center space-x-2 text-xl font-semibold">
-              <Settings className="h-6 w-6 text-primary" />
+        <Card
+          className={`glass-morphism w-full max-w-3xl mx-auto p-0 flex flex-col
+            ${
+              isMobile
+                ? "rounded-t-xl shadow-lg h-[520px] min-h-[420px] max-h-[90vh] mt-2 transition-all duration-200"
+                : "rounded-3xl shadow-2xl h-[600px] xl:h-[700px] 2xl:h-[800px] min-h-[500px] md:min-h-[700px] xl:min-h-[800px] max-h-[90vh] mt-0"
+            }
+          `}
+        >
+          <CardHeader
+            className={`flex flex-row items-center justify-between sticky top-0 z-10 bg-card/90 dark:bg-card/80 backdrop-blur-md
+              ${
+                isMobile
+                  ? "rounded-t-2xl px-4 pt-4 pb-2"
+                  : "rounded-t-3xl px-8 pt-8 pb-2"
+              }`}
+          >
+            <div
+              className={`flex items-center space-x-2 font-semibold ${
+                isMobile ? "text-base" : "text-xl"
+              }`}
+            >
+              <Settings
+                className={`${isMobile ? "h-5 w-5" : "h-6 w-6"} text-primary`}
+              />
               <span>Live 3D Controls</span>
             </div>
-            <Button variant="outline" size="sm" onClick={resetCustomization}>
-              <RotateCcw className="h-4 w-4 mr-2" />
-              Reset All
+            <Button
+              variant="outline"
+              size={isMobile ? "sm" : "sm"}
+              onClick={resetCustomization}
+              className={isMobile ? "text-xs px-2 py-1" : ""}
+            >
+              <RotateCcw
+                className={`${isMobile ? "h-4 w-4 mr-1" : "h-4 w-4 mr-2"}`}
+              />
+              <span className={isMobile ? "hidden sm:inline" : ""}>
+                Reset All
+              </span>
             </Button>
           </CardHeader>
-          <div className="px-8 pb-8 flex-1 min-h-0 flex flex-col">
-            <p className="text-muted-foreground mb-6">
+          <div
+            className={`flex-1 min-h-0 flex flex-col ${
+              isMobile ? "px-4 pb-4" : "px-8 pb-8"
+            }`}
+          >
+            <p
+              className={`text-muted-foreground mb-4 ${
+                isMobile ? "text-xs" : "mb-6"
+              }`}
+            >
               Customize the 3D scene in real-time and export the code instantly
             </p>
-            <CardContent className="space-y-8 p-0 flex-1 min-h-0 overflow-y-auto">
-              <TabsContent value="object" className="space-y-8">
+            <CardContent
+              className={`space-y-6 p-0 flex-1 min-h-0 overflow-y-auto ${
+                isMobile ? "space-y-4" : "space-y-8"
+              }`}
+            >
+              <TabsContent value="object" className="space-y-4 md:space-y-8">
                 {/* Main Object Controls */}
-                <div className="space-y-4">
-                  <Label className="flex items-center space-x-2 text-lg font-semibold">
-                    <Palette className="h-5 w-5" />
+                <div className="space-y-2 md:space-y-4">
+                  <Label
+                    className={`flex items-center space-x-2 font-semibold ${
+                      isMobile ? "text-base" : "text-lg"
+                    }`}
+                  >
+                    <Palette
+                      className={`${isMobile ? "h-4 w-4" : "h-5 w-5"}`}
+                    />
                     <span>Main Object</span>
                   </Label>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
+                  <div
+                    className={`grid gap-4 ${
+                      isMobile ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
+                    }`}
+                  >
+                    <div className="space-y-2 md:space-y-4">
                       <div>
-                        <Label className="text-sm font-medium">Color</Label>
+                        <Label
+                          className={`${
+                            isMobile ? "text-xs" : "text-sm font-medium"
+                          }`}
+                        >
+                          Color
+                        </Label>
                         <Input
                           type="color"
                           value={customization.mainObjectColor}
@@ -101,12 +175,19 @@ export function HeroControlPanel() {
                               mainObjectColor: e.target.value,
                             })
                           }
-                          className="w-full h-12 mt-2"
+                          className={`w-full ${
+                            isMobile ? "h-10 mt-1" : "h-12 mt-2"
+                          }`}
                         />
                       </div>
-
                       <div>
-                        <Label className="text-sm font-medium">Scale</Label>
+                        <Label
+                          className={`${
+                            isMobile ? "text-xs" : "text-sm font-medium"
+                          }`}
+                        >
+                          Scale
+                        </Label>
                         <Slider
                           value={[customization.mainObjectScale]}
                           onValueChange={([value]) =>
@@ -115,15 +196,24 @@ export function HeroControlPanel() {
                           min={0.5}
                           max={2}
                           step={0.1}
-                          className="mt-2"
+                          className={isMobile ? "mt-1" : "mt-2"}
                         />
-                        <span className="text-sm text-muted-foreground">
+                        <span
+                          className={`text-muted-foreground ${
+                            isMobile ? "text-xs" : "text-sm"
+                          }`}
+                        >
                           {customization.mainObjectScale.toFixed(1)}
                         </span>
                       </div>
-
                       <div>
-                        <Label className="text-sm font-medium">Metalness</Label>
+                        <Label
+                          className={`${
+                            isMobile ? "text-xs" : "text-sm font-medium"
+                          }`}
+                        >
+                          Metalness
+                        </Label>
                         <Slider
                           value={[customization.mainObjectMetalness]}
                           onValueChange={([value]) =>
@@ -132,17 +222,26 @@ export function HeroControlPanel() {
                           min={0}
                           max={1}
                           step={0.1}
-                          className="mt-2"
+                          className={isMobile ? "mt-1" : "mt-2"}
                         />
-                        <span className="text-sm text-muted-foreground">
+                        <span
+                          className={`text-muted-foreground ${
+                            isMobile ? "text-xs" : "text-sm"
+                          }`}
+                        >
                           {customization.mainObjectMetalness.toFixed(1)}
                         </span>
                       </div>
                     </div>
-
-                    <div className="space-y-4">
+                    <div className="space-y-2 md:space-y-4">
                       <div>
-                        <Label className="text-sm font-medium">Roughness</Label>
+                        <Label
+                          className={`${
+                            isMobile ? "text-xs" : "text-sm font-medium"
+                          }`}
+                        >
+                          Roughness
+                        </Label>
                         <Slider
                           value={[customization.mainObjectRoughness]}
                           onValueChange={([value]) =>
@@ -151,15 +250,22 @@ export function HeroControlPanel() {
                           min={0}
                           max={1}
                           step={0.1}
-                          className="mt-2"
+                          className={isMobile ? "mt-1" : "mt-2"}
                         />
-                        <span className="text-sm text-muted-foreground">
+                        <span
+                          className={`text-muted-foreground ${
+                            isMobile ? "text-xs" : "text-sm"
+                          }`}
+                        >
                           {customization.mainObjectRoughness.toFixed(1)}
                         </span>
                       </div>
-
                       <div>
-                        <Label className="text-sm font-medium">
+                        <Label
+                          className={`${
+                            isMobile ? "text-xs" : "text-sm font-medium"
+                          }`}
+                        >
                           Distortion
                         </Label>
                         <Slider
@@ -170,15 +276,22 @@ export function HeroControlPanel() {
                           min={0}
                           max={1}
                           step={0.1}
-                          className="mt-2"
+                          className={isMobile ? "mt-1" : "mt-2"}
                         />
-                        <span className="text-sm text-muted-foreground">
+                        <span
+                          className={`text-muted-foreground ${
+                            isMobile ? "text-xs" : "text-sm"
+                          }`}
+                        >
                           {customization.mainObjectDistort.toFixed(1)}
                         </span>
                       </div>
-
                       <div>
-                        <Label className="text-sm font-medium">
+                        <Label
+                          className={`${
+                            isMobile ? "text-xs" : "text-sm font-medium"
+                          }`}
+                        >
                           Animation Speed
                         </Label>
                         <Slider
@@ -189,32 +302,48 @@ export function HeroControlPanel() {
                           min={0.5}
                           max={5}
                           step={0.1}
-                          className="mt-2"
+                          className={isMobile ? "mt-1" : "mt-2"}
                         />
-                        <span className="text-sm text-muted-foreground">
+                        <span
+                          className={`text-muted-foreground ${
+                            isMobile ? "text-xs" : "text-sm"
+                          }`}
+                        >
                           {customization.mainObjectSpeed.toFixed(1)}
                         </span>
                       </div>
                     </div>
                   </div>
                 </div>
-
                 {/* Sphere Controls */}
-                <div className="space-y-4">
-                  <Label className="text-lg font-semibold">
+                <div className="space-y-2 md:space-y-4">
+                  <Label
+                    className={`${
+                      isMobile ? "text-base" : "text-lg font-semibold"
+                    }`}
+                  >
                     Orbiting Spheres
                   </Label>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div
+                    className={`grid gap-2 ${
+                      isMobile ? "grid-cols-1" : "grid-cols-1 md:grid-cols-3"
+                    }`}
+                  >
                     {[1, 2, 3].map((num) => (
                       <div
                         key={num}
-                        className="space-y-3 p-4 bg-muted/20 rounded-lg"
+                        className={`space-y-2 p-2 rounded-lg ${
+                          isMobile ? "bg-muted/10" : "bg-muted/20"
+                        }`}
                       >
-                        <Label className="text-sm font-medium">
+                        <Label
+                          className={`${
+                            isMobile ? "text-xs" : "text-sm font-medium"
+                          }`}
+                        >
                           Sphere {num}
                         </Label>
-                        <div className="space-y-3">
+                        <div className="space-y-2">
                           <div>
                             <Label className="text-xs text-muted-foreground">
                               Color
@@ -231,7 +360,7 @@ export function HeroControlPanel() {
                                   [`sphere${num}Color`]: e.target.value,
                                 })
                               }
-                              className="w-full h-8"
+                              className={`w-full ${isMobile ? "h-8" : "h-8"}`}
                             />
                           </div>
                           <div>
@@ -254,7 +383,11 @@ export function HeroControlPanel() {
                               step={0.05}
                               className="mt-1"
                             />
-                            <span className="text-xs text-muted-foreground">
+                            <span
+                              className={`text-muted-foreground ${
+                                isMobile ? "text-xs" : "text-xs"
+                              }`}
+                            >
                               {(
                                 customization[
                                   `sphere${num}Scale` as keyof typeof customization
@@ -268,7 +401,7 @@ export function HeroControlPanel() {
                   </div>
                 </div>
               </TabsContent>
-              <TabsContent value="lights" className="space-y-8">
+              <TabsContent value="lights" className="space-y-4 md:space-y-8">
                 <div className="space-y-4">
                   <Label className="flex items-center space-x-2 text-lg font-semibold">
                     <Lightbulb className="h-5 w-5" />
@@ -388,7 +521,7 @@ export function HeroControlPanel() {
                   </div>
                 </div>
               </TabsContent>
-              <TabsContent value="effects" className="space-y-8">
+              <TabsContent value="effects" className="space-y-4 md:space-y-8">
                 <div className="space-y-4">
                   <Label className="flex items-center space-x-2 text-lg font-semibold">
                     <Sparkles className="h-5 w-5" />
@@ -514,7 +647,7 @@ export function HeroControlPanel() {
                   </div>
                 </div>
               </TabsContent>
-              <TabsContent value="export" className="space-y-8">
+              <TabsContent value="export" className="space-y-4 md:space-y-8">
                 <div className="space-y-6">
                   <Label className="flex items-center space-x-2 text-lg font-semibold">
                     <Code className="h-5 w-5" />

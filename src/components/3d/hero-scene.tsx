@@ -7,6 +7,7 @@ import {
   Environment,
   Sphere,
   MeshDistortMaterial,
+  OrbitControls,
 } from "@react-three/drei";
 import { useHeroStore } from "@/lib/hero-store";
 import * as THREE from "three";
@@ -106,7 +107,7 @@ function HeroObject() {
 
         {/* Wireframe rings */}
         <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-          <torusGeometry args={[2.5, 0.02, 16, 100]} />
+          <torusGeometry args={[2.8, 0.02, 16, 100]} />
           <meshBasicMaterial
             color={customization.ring1Color}
             transparent
@@ -115,7 +116,7 @@ function HeroObject() {
         </mesh>
 
         <mesh rotation={[0, Math.PI / 4, Math.PI / 3]} position={[0, 0, 0]}>
-          <torusGeometry args={[3, 0.01, 16, 100]} />
+          <torusGeometry args={[3.3, 0.01, 16, 100]} />
           <meshBasicMaterial
             color={customization.ring2Color}
             transparent
@@ -171,7 +172,7 @@ export function HeroScene() {
   return (
     <div className="w-full h-full">
       <Canvas
-        camera={{ position: [0, 0, 8], fov: 45 }}
+        camera={{ position: [0, 0, 10], fov: 75 }}
         shadows
         gl={{
           antialias: true,
@@ -204,6 +205,8 @@ export function HeroScene() {
         </Suspense>
 
         <Environment preset="studio" />
+
+        <OrbitControls enableZoom={true} enablePan={true} enableRotate={true} />
       </Canvas>
     </div>
   );

@@ -56,6 +56,50 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    /* Prevent horizontal scroll on mobile */
+    overflow-x: hidden;
+    /* Improve touch scrolling */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Mobile-specific improvements */
+  @media (max-width: 768px) {
+    html {
+      font-size: 14px;
+    }
+
+    /* Improve touch targets */
+    button,
+    a,
+    input,
+    select,
+    textarea {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* Better spacing for mobile */
+    .space-y-4>*+* {
+      margin-top: 1rem;
+    }
+
+    .space-y-6>*+* {
+      margin-top: 1.5rem;
+    }
+
+    .space-y-8>*+* {
+      margin-top: 2rem;
+    }
+  }
+
+  /* Prevent zoom on input focus on iOS */
+  @media screen and (max-width: 768px) {
+
+    input,
+    select,
+    textarea {
+      font-size: 16px;
+    }
   }
 }
 
@@ -250,7 +294,57 @@
     @apply bg-background/80 border-border/30;
   }
 
-  /* Focus ring */
+  /* Mobile-specific improvements */
+  @media (max-width: 768px) {
+    .card-hover {
+      @apply hover:shadow-md hover:-translate-y-0.5;
+    }
+
+    .hover-lift {
+      @apply hover:-translate-y-1 hover:shadow-lg;
+    }
+
+    .hover-scale {
+      @apply hover:scale-105;
+    }
+
+    /* Better mobile spacing */
+    .space-y-6>*+* {
+      margin-top: 1.25rem;
+    }
+
+    .space-y-8>*+* {
+      margin-top: 1.75rem;
+    }
+
+    /* Mobile-friendly text sizes */
+    .text-4xl {
+      font-size: 2rem;
+      line-height: 2.25rem;
+    }
+
+    .text-5xl {
+      font-size: 2.5rem;
+      line-height: 2.75rem;
+    }
+
+    .text-6xl {
+      font-size: 3rem;
+      line-height: 3.25rem;
+    }
+
+    .text-7xl {
+      font-size: 3.5rem;
+      line-height: 3.75rem;
+    }
+
+    .text-8xl {
+      font-size: 4rem;
+      line-height: 4.25rem;
+    }
+  }
+
+  /* Focus ring for accessibility */
   .focus-ring {
     @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
   }
@@ -260,27 +354,27 @@
     @apply transition-all duration-300 ease-in-out;
   }
 
-  /* Button variants */
+  /* Custom button styles */
   .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90;
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2;
   }
 
   .btn-secondary {
-    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 focus:ring-2 focus:ring-secondary focus:ring-offset-2;
   }
 
-  /* Input styles */
+  /* Custom input styles */
   .input-custom {
-    @apply bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary;
+    @apply border border-input bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2;
   }
 
-  /* Badge styles */
+  /* Custom badge styles */
   .badge-custom {
-    @apply bg-primary/10 text-primary border-primary/20;
+    @apply inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
   }
 
   /* Loading spinner */
   .loading-spinner {
-    @apply animate-spin rounded-full border-2 border-primary border-t-transparent;
+    @apply animate-spin rounded-full border-4 border-primary border-t-transparent;
   }
 }
