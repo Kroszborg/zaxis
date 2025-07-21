@@ -29,7 +29,27 @@ export interface ComponentModel {
     | 'pyramid'
     | 'capsule'
     | 'hero-block'
-    | 'showcase-card';
+    | 'showcase-card'
+    | 'holographic-display'
+    | 'energy-core'
+    | 'neon-sign'
+    | 'floating-island'
+    | 'portal-gate'
+    | 'crystal-cluster'
+    | 'steampunk-engine'
+    | 'data-sphere'
+    | 'magnetic-field'
+    | 'quantum-cube'
+    | 'time-machine'
+    | 'neural-network'
+    | 'crystal-prism'
+    | 'plasma-ball'
+    | 'fractal-tree'
+    | 'holographic-ui'
+    | 'modern-card'
+    | 'floating-button'
+    | 'progress-bar'
+    | 'notification-badge';
   thumbnailPath: string;
   defaultScale: [number, number, number];
   defaultRotation: [number, number, number];

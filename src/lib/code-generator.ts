@@ -29,6 +29,26 @@ export function generateComponentCode(component: ComponentModel, customization: 
     'capsule': generateCapsuleCode,
     'hero-block': generateHeroBlockCode,
     'showcase-card': generateShowcaseCardCode,
+    'holographic-display': generateHolographicDisplayCode,
+    'energy-core': generateEnergyCoreCode,
+    'neon-sign': generateNeonSignCode,
+    'floating-island': generateFloatingIslandCode,
+    'portal-gate': generatePortalGateCode,
+    'crystal-cluster': generateCrystalClusterCode,
+    'steampunk-engine': generateSteampunkEngineCode,
+    'data-sphere': generateDataSphereCode,
+    'magnetic-field': generateMagneticFieldCode,
+    'quantum-cube': generateQuantumCubeCode,
+    'time-machine': generateTimeMachineCode,
+    'neural-network': generateNeuralNetworkCode,
+    'crystal-prism': generateCrystalPrismCode,
+    'plasma-ball': generatePlasmaBallCode,
+    'fractal-tree': generateFractalTreeCode,
+    'holographic-ui': generateHolographicUICode,
+    'modern-card': generateModernCardCode,
+    'floating-button': generateFloatingButtonCode,
+    'progress-bar': generateProgressBarCode,
+    'notification-badge': generateNotificationBadgeCode,
   };
 
   const generator = componentFunctions[component.componentType as keyof typeof componentFunctions];
@@ -1160,6 +1180,567 @@ export function ${component.name.replace(/\s+/g, '')}Component() {
       <mesh scale={[1.3, 0.01, 1]} position={[0, -0.12, 0]}>
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial color="${color}" transparent opacity={0.1} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+// Additional code generators for new components
+function generateHolographicDisplayCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <boxGeometry args={[1.5, 1, 0.1]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} transparent opacity={0.3} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateEnergyCoreCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.02; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <sphereGeometry args={[0.6, 32, 32]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} emissive={color} emissiveIntensity={0.8} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateNeonSignCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <boxGeometry args={[2, 0.5, 0.1]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} emissive={color} emissiveIntensity={0.5} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateFloatingIslandCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <cylinderGeometry args={[1, 0.5, 0.3, 8]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generatePortalGateCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.02; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <torusGeometry args={[1, 0.1, 8, 16]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} emissive={color} emissiveIntensity={0.6} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateCrystalClusterCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <coneGeometry args={[0.3, 0.8, 6]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateSteampunkEngineCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.005; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <cylinderGeometry args={[0.5, 0.5, 1.0, 16]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateDataSphereCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <sphereGeometry args={[0.5, 32, 32]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} emissive={color} emissiveIntensity={0.3} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateMagneticFieldCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <sphereGeometry args={[0.8, 32, 32]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} emissive={color} emissiveIntensity={0.4} transparent opacity={0.6} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateQuantumCubeCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.02; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} emissive={color} emissiveIntensity={0.5} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateTimeMachineCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <cylinderGeometry args={[0.5, 0.3, 1.2, 8]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateNeuralNetworkCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <sphereGeometry args={[0.8, 32, 32]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} emissive={color} emissiveIntensity={0.4} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateCrystalPrismCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <coneGeometry args={[0.4, 0.8, 6]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generatePlasmaBallCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <sphereGeometry args={[0.5, 32, 32]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} emissive={color} emissiveIntensity={0.8} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateFractalTreeCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <cylinderGeometry args={[0.1, 0.05, 1.5, 8]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateHolographicUICode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <boxGeometry args={[2, 1.5, 0.1]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} transparent opacity={0.3} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateModernCardCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.position.y = Math.sin(state.clock.elapsedTime) * 0.05; groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <boxGeometry args={[1.2, 0.8, 1.5]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateFloatingButtonCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.position.y = Math.sin(state.clock.elapsedTime) * 0.1; groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <sphereGeometry args={[0.3, 32, 32]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} emissive={color} emissiveIntensity={0.3} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateProgressBarCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <boxGeometry args={[1.5, 0.8, 1]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} />
+      </mesh>
+    </group>
+  );
+}`;
+}
+
+function generateNotificationBadgeCode(component: ComponentModel, customization: ComponentCustomization): string {
+  const { scale, rotation, position, color, metalness, roughness } = customization;
+  return `import { useRef, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+export function ${component.name.replace(/\s+/g, '')}Component() {
+  const groupRef = useRef<THREE.Group>(null);
+  useEffect(() => {
+    if (groupRef.current) {
+      gsap.to(groupRef.current.scale, { x: ${scale[0]}, y: ${scale[1]}, z: ${scale[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.rotation, { x: ${rotation[0]}, y: ${rotation[1]}, z: ${rotation[2]}, duration: 0.5, ease: "power2.out" });
+      gsap.to(groupRef.current.position, { x: ${position[0]}, y: ${position[1]}, z: ${position[2]}, duration: 0.5, ease: "power2.out" });
+    }
+  }, []);
+  useFrame((state) => { if (groupRef.current) { groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 2) * 0.05; groupRef.current.rotation.y += 0.01; } });
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <sphereGeometry args={[0.2, 32, 32]} />
+        <meshStandardMaterial color="${color}" metalness={${metalness}} roughness={${roughness}} emissive={color} emissiveIntensity={0.5} />
       </mesh>
     </group>
   );
