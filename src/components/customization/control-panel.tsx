@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useComponentStore } from "@/lib/store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -140,6 +141,76 @@ const materialPresets = [
     roughness: 0.2,
     category: "metal",
   },
+  {
+    name: "Holographic",
+    color: "#00D4FF",
+    metalness: 0.1,
+    roughness: 0.0,
+    category: "emissive",
+  },
+  {
+    name: "Energy",
+    color: "#FF6600",
+    metalness: 0.0,
+    roughness: 0.1,
+    category: "emissive",
+  },
+  {
+    name: "Neon Orange",
+    color: "#FF6600",
+    metalness: 0.0,
+    roughness: 0.2,
+    category: "emissive",
+  },
+  {
+    name: "Neon Yellow",
+    color: "#FFFF00",
+    metalness: 0.0,
+    roughness: 0.2,
+    category: "emissive",
+  },
+  {
+    name: "Neon Purple",
+    color: "#8B5CF6",
+    metalness: 0.0,
+    roughness: 0.2,
+    category: "emissive",
+  },
+  {
+    name: "Neon Red",
+    color: "#EF4444",
+    metalness: 0.0,
+    roughness: 0.2,
+    category: "emissive",
+  },
+  {
+    name: "Crystal",
+    color: "#E0F2FE",
+    metalness: 0.1,
+    roughness: 0.0,
+    category: "glass",
+  },
+  {
+    name: "Diamond",
+    color: "#F0F9FF",
+    metalness: 0.0,
+    roughness: 0.0,
+    category: "glass",
+  },
+  {
+    name: "Grass",
+    color: "#22C55E",
+    metalness: 0.0,
+    roughness: 0.9,
+    category: "organic",
+  },
+  {
+    name: "Earth",
+    color: "#78350F",
+    metalness: 0.0,
+    roughness: 0.9,
+    category: "organic",
+  },
 ];
 
 // Component-specific presets
@@ -198,6 +269,7 @@ export function ControlPanel() {
     resetCustomization,
   } = useComponentStore();
   const isMobile = useIsMobile();
+  const [codeLanguage, setCodeLanguage] = React.useState<'typescript' | 'javascript'>('typescript');
 
   if (!selectedComponent) {
     return (
@@ -211,10 +283,10 @@ export function ControlPanel() {
   }
 
   const handleCopyCode = () => {
-    const code = generateComponentCode(selectedComponent, customization);
+    const code = generateComponentCode(selectedComponent, customization, codeLanguage);
     navigator.clipboard.writeText(code);
     toast.success("Code copied to clipboard!", {
-      description: "The generated code is ready to use in your project.",
+      description: `${codeLanguage === 'typescript' ? 'TypeScript' : 'JavaScript'} code is ready to use in your project.`,
     });
   };
 
@@ -538,12 +610,31 @@ export function ControlPanel() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 px-4 sm:px-6">
+          <div className="space-y-2">
+            <Label className="text-xs sm:text-sm">Code Language</Label>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant={codeLanguage === 'typescript' ? 'default' : 'outline'}
+                onClick={() => setCodeLanguage('typescript')}
+                className="text-xs sm:text-sm"
+              >
+                TypeScript
+              </Button>
+              <Button
+                variant={codeLanguage === 'javascript' ? 'default' : 'outline'}
+                onClick={() => setCodeLanguage('javascript')}
+                className="text-xs sm:text-sm"
+              >
+                JavaScript
+              </Button>
+            </div>
+          </div>
           <Button
             onClick={handleCopyCode}
             className="w-full btn-glow text-xs sm:text-sm"
           >
             <Copy className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
-            Copy Code
+            Copy {codeLanguage === 'typescript' ? 'TS' : 'JS'} Code
           </Button>
           <Button
             variant="outline"

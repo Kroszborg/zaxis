@@ -49,7 +49,13 @@ export interface ComponentModel {
     | 'modern-card'
     | 'floating-button'
     | 'progress-bar'
-    | 'notification-badge';
+    | 'notification-badge'
+    | 'tree'
+    | 'smartphone'
+    | 'bar-chart'
+    | 'laptop'
+    | 'chair'
+    | 'pie-chart';
   thumbnailPath: string;
   defaultScale: [number, number, number];
   defaultRotation: [number, number, number];

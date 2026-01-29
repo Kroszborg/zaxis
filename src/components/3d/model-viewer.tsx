@@ -13,6 +13,17 @@ import { useComponentStore } from "@/lib/store";
 import * as THREE from "three";
 import gsap from "gsap";
 
+// Custom Hooks
+import { use3DAnimation } from "@/hooks/use-3d-animation";
+
+// New Components
+import { Tree } from "./nature/Tree";
+import { Smartphone } from "./technology/Smartphone";
+import { Laptop } from "./technology/Laptop";
+import { Chair } from "./furniture/Chair";
+import { BarChart } from "./dataviz/BarChart";
+import { PieChart } from "./dataviz/PieChart";
+
 interface Component3DProps {
   componentType: string;
   customization: any;
@@ -27,33 +38,8 @@ interface Component3DProps {
 const HexBolt = memo(({ customization }: { customization: any }) => {
   const groupRef = useRef<THREE.Group>(null);
 
-  useEffect(() => {
-    if (groupRef.current) {
-      gsap.to(groupRef.current.scale, {
-        x: customization.scale[0],
-        y: customization.scale[1],
-        z: customization.scale[2],
-        duration: 0.5,
-        ease: "power2.out",
-      });
-
-      gsap.to(groupRef.current.rotation, {
-        x: customization.rotation[0],
-        y: customization.rotation[1],
-        z: customization.rotation[2],
-        duration: 0.5,
-        ease: "power2.out",
-      });
-
-      gsap.to(groupRef.current.position, {
-        x: customization.position[0],
-        y: customization.position[1],
-        z: customization.position[2],
-        duration: 0.5,
-        ease: "power2.out",
-      });
-    }
-  }, [customization]);
+  // Use custom animation hook instead of manual GSAP calls
+  use3DAnimation(groupRef, customization);
 
   useFrame((state) => {
     if (groupRef.current) {
@@ -96,33 +82,8 @@ HexBolt.displayName = "HexBolt";
 const DoorHinge = memo(({ customization }: { customization: any }) => {
   const groupRef = useRef<THREE.Group>(null);
 
-  useEffect(() => {
-    if (groupRef.current) {
-      gsap.to(groupRef.current.scale, {
-        x: customization.scale[0],
-        y: customization.scale[1],
-        z: customization.scale[2],
-        duration: 0.5,
-        ease: "power2.out",
-      });
-
-      gsap.to(groupRef.current.rotation, {
-        x: customization.rotation[0],
-        y: customization.rotation[1],
-        z: customization.rotation[2],
-        duration: 0.5,
-        ease: "power2.out",
-      });
-
-      gsap.to(groupRef.current.position, {
-        x: customization.position[0],
-        y: customization.position[1],
-        z: customization.position[2],
-        duration: 0.5,
-        ease: "power2.out",
-      });
-    }
-  }, [customization]);
+  // Use custom animation hook instead of manual GSAP calls
+  use3DAnimation(groupRef, customization);
 
   return (
     <group ref={groupRef}>
@@ -168,33 +129,8 @@ DoorHinge.displayName = "DoorHinge";
 const MetalPanel = memo(({ customization }: { customization: any }) => {
   const groupRef = useRef<THREE.Group>(null);
 
-  useEffect(() => {
-    if (groupRef.current) {
-      gsap.to(groupRef.current.scale, {
-        x: customization.scale[0],
-        y: customization.scale[1],
-        z: customization.scale[2],
-        duration: 0.5,
-        ease: "power2.out",
-      });
-
-      gsap.to(groupRef.current.rotation, {
-        x: customization.rotation[0],
-        y: customization.rotation[1],
-        z: customization.rotation[2],
-        duration: 0.5,
-        ease: "power2.out",
-      });
-
-      gsap.to(groupRef.current.position, {
-        x: customization.position[0],
-        y: customization.position[1],
-        z: customization.position[2],
-        duration: 0.5,
-        ease: "power2.out",
-      });
-    }
-  }, [customization]);
+  // Use custom animation hook instead of manual GSAP calls
+  use3DAnimation(groupRef, customization);
 
   return (
     <group ref={groupRef}>
@@ -3955,6 +3891,19 @@ const Component3D = memo(
         return <ProgressBar customization={customization} />;
       case "notification-badge":
         return <NotificationBadge customization={customization} />;
+      // New components
+      case "tree":
+        return <Tree customization={customization} />;
+      case "smartphone":
+        return <Smartphone customization={customization} />;
+      case "laptop":
+        return <Laptop customization={customization} />;
+      case "chair":
+        return <Chair customization={customization} />;
+      case "bar-chart":
+        return <BarChart customization={customization} />;
+      case "pie-chart":
+        return <PieChart customization={customization} />;
       default:
         return <Cube customization={customization} />;
     }

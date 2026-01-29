@@ -14,14 +14,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, Filter, X, Eye } from "lucide-react";
+import { Search, Filter, X, Eye, Heart } from "lucide-react";
 import { sampleComponents, componentCategories } from "@/lib/components-data";
+import { useComponentStore } from "@/lib/store";
 
 export default function BrowsePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedComplexity, setSelectedComplexity] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("name");
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const { favorites } = useComponentStore();
 
   const filteredComponents = useMemo(() => {
     let filtered = sampleComponents.filter((component) => {
@@ -39,8 +42,10 @@ export default function BrowsePage() {
       const matchesComplexity =
         selectedComplexity === "all" ||
         component.complexity === selectedComplexity;
+      const matchesFavorites =
+        !showFavoritesOnly || favorites.includes(component.id);
 
-      return matchesSearch && matchesCategory && matchesComplexity;
+      return matchesSearch && matchesCategory && matchesComplexity && matchesFavorites;
     });
 
     // Sort components
@@ -57,16 +62,17 @@ export default function BrowsePage() {
     });
 
     return filtered;
-  }, [searchTerm, selectedCategory, selectedComplexity, sortBy]);
+  }, [searchTerm, selectedCategory, selectedComplexity, sortBy, showFavoritesOnly, favorites]);
 
   const clearAllFilters = () => {
     setSearchTerm("");
     setSelectedCategory("all");
     setSelectedComplexity("all");
+    setShowFavoritesOnly(false);
   };
 
   const hasActiveFilters =
-    searchTerm || selectedCategory !== "all" || selectedComplexity !== "all";
+    searchTerm || selectedCategory !== "all" || selectedComplexity !== "all" || showFavoritesOnly;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
@@ -141,6 +147,23 @@ export default function BrowsePage() {
                     {filteredComponents.length !== 1 ? "s" : ""} found
                   </span>
                 </div>
+                <Button
+                  variant={showFavoritesOnly ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                  className={`${
+                    showFavoritesOnly
+                      ? "bg-red-500 hover:bg-red-600"
+                      : "hover:bg-red-50 dark:hover:bg-red-950/20"
+                  }`}
+                >
+                  <Heart
+                    className={`h-4 w-4 mr-2 ${
+                      showFavoritesOnly ? "fill-current" : ""
+                    }`}
+                  />
+                  Favorites {favorites.length > 0 && `(${favorites.length})`}
+                </Button>
                 {hasActiveFilters && (
                   <Button
                     variant="ghost"
@@ -204,6 +227,15 @@ export default function BrowsePage() {
                 >
                   Complexity: {selectedComplexity}{" "}
                   <X className="h-3 w-3 ml-1" />
+                </Badge>
+              )}
+              {showFavoritesOnly && (
+                <Badge
+                  variant="secondary"
+                  className="cursor-pointer hover-glow bg-red-500/20 border-red-500/30 text-red-600"
+                  onClick={() => setShowFavoritesOnly(false)}
+                >
+                  Favorites Only <X className="h-3 w-3 ml-1" />
                 </Badge>
               )}
             </div>

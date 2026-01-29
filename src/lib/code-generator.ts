@@ -1,7 +1,26 @@
 import { ComponentModel } from '@/types/component';
 import { ComponentCustomization } from '@/types/component';
 
-export function generateComponentCode(component: ComponentModel, customization: ComponentCustomization): string {
+// Utility function to convert TypeScript code to JavaScript
+export function convertToJavaScript(tsCode: string): string {
+  return tsCode
+    // Remove type annotations from useRef
+    .replace(/useRef<[^>]+>/g, 'useRef')
+    // Remove type annotations from function parameters
+    .replace(/:\s*\w+(\[\])?(?=\s*[,\)])/g, '')
+    // Remove React.FC and other React type annotations
+    .replace(/<[A-Z]\w+Props>/g, '')
+    // Remove interface/type definitions (simple approach)
+    .replace(/interface\s+\w+\s*{[^}]+}/g, '')
+    .replace(/type\s+\w+\s*=\s*[^;]+;/g, '')
+    // Remove generic type parameters from JSX
+    .replace(/<([A-Z]\w+)<[^>]+>/g, '<$1')
+    // Remove : type from const/let/var declarations
+    .replace(/(const|let|var)\s+(\w+)\s*:\s*[^=]+=/g, '$1 $2 =')
+    .trim();
+}
+
+export function generateComponentCode(component: ComponentModel, customization: ComponentCustomization, language: 'typescript' | 'javascript' = 'typescript'): string {
   const { scale, rotation, position, color, metalness, roughness } = customization;
   
   const componentFunctions = {
@@ -52,7 +71,9 @@ export function generateComponentCode(component: ComponentModel, customization: 
   };
 
   const generator = componentFunctions[component.componentType as keyof typeof componentFunctions];
-  return generator ? generator(component, customization) : generateCubeCode(component, customization);
+  const code = generator ? generator(component, customization) : generateCubeCode(component, customization);
+
+  return language === 'javascript' ? convertToJavaScript(code) : code;
 }
 
 function generateHexBoltCode(component: ComponentModel, customization: ComponentCustomization): string {

@@ -3,24 +3,34 @@
 import { useEffect, useRef } from 'react';
 import WebGLFluidEnhanced from 'webgl-fluid-enhanced';
 
+declare global {
+  interface Window {
+    fluidSimulation?: WebGLFluidEnhanced;
+  }
+}
+
 export function WebGLFluidBackground() {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    console.log("WebGL Simulation Starting...");
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
+    if (!containerRef.current) return;
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log("WebGL Simulation Starting...");
+    }
+
     const simulation = new WebGLFluidEnhanced(containerRef.current);
+
     // Store simulation instance in window for global access
-    (window as any).fluidSimulation = simulation;
+    window.fluidSimulation = simulation;
     simulation.start();
 
-    // setInterval(() => {simulation.multipleSplats(6)}, 4000);
-
     return () => {
-      console.log("WebGL Simulation Stopping...");
+      if (process.env.NODE_ENV === 'development') {
+        console.log("WebGL Simulation Stopping...");
+      }
       simulation.stop();
-      delete (window as any).fluidSimulation;
+      delete window.fluidSimulation;
     };
   }, []);
 

@@ -13,6 +13,7 @@ import {
   Cpu,
   Building2,
   Shapes,
+  Heart,
 } from "lucide-react";
 import { useComponentStore } from "@/lib/store";
 
@@ -29,13 +30,20 @@ const categoryIcons = {
 };
 
 export function ComponentCard({ component }: ComponentCardProps) {
-  const { setSelectedComponent } = useComponentStore();
+  const { setSelectedComponent, toggleFavorite, isFavorite } = useComponentStore();
+  const favorite = isFavorite(component.id);
 
   const IconComponent =
     categoryIcons[component.category as keyof typeof categoryIcons] || Sparkles;
 
   const handleViewComponent = () => {
     setSelectedComponent(component);
+  };
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(component.id);
   };
 
   const getComplexityColor = (complexity: string) => {
@@ -55,9 +63,26 @@ export function ComponentCard({ component }: ComponentCardProps) {
     <Card className="card-hover group cursor-pointer overflow-hidden border-2 border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 h-full flex flex-col">
       <CardContent className="p-6 space-y-4 flex-1 flex flex-col">
         <div className="space-y-3 flex-1">
-          <h3 className="text-xl font-bold group-hover:text-primary transition-colors duration-300 line-clamp-1">
-            {component.name}
-          </h3>
+          <div className="flex items-start justify-between gap-2">
+            <h3 className="text-xl font-bold group-hover:text-primary transition-colors duration-300 line-clamp-1 flex-1">
+              {component.name}
+            </h3>
+            <Button
+              variant="ghost"
+              size="icon"
+              className={`h-8 w-8 shrink-0 ${
+                favorite
+                  ? "text-red-500 hover:text-red-600"
+                  : "text-muted-foreground hover:text-red-500"
+              }`}
+              onClick={handleToggleFavorite}
+              aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
+            >
+              <Heart
+                className={`h-5 w-5 transition-all ${favorite ? "fill-current" : ""}`}
+              />
+            </Button>
+          </div>
           <Badge
             variant="secondary"
             className="bg-background/80 backdrop-blur-sm border-border/50"

@@ -87,34 +87,49 @@ function ViewerContent() {
   }, [selectedComponent, customization]);
 
   // Memoized event handlers to prevent unnecessary rerenders
-  const handleCopyCode = useCallback(() => {
+  const handleCopyCode = useCallback(async () => {
     if (!generatedCode) return;
 
-    navigator.clipboard.writeText(generatedCode);
-    toast.success("Code copied to clipboard!", {
-      description: "The generated code is ready to use in your project.",
-    });
+    try {
+      await navigator.clipboard.writeText(generatedCode);
+      toast.success("Code copied to clipboard!", {
+        description: "The generated code is ready to use in your project.",
+      });
+    } catch (error) {
+      console.error('Failed to copy code:', error);
+      toast.error("Failed to copy code", {
+        description: "Please try selecting and copying the code manually.",
+      });
+    }
   }, [generatedCode]);
 
   const handleShare = useCallback(async () => {
     if (!selectedComponent) return;
 
     const url = `${window.location.origin}/viewer?id=${selectedComponent.id}`;
-    if (navigator.share) {
-      try {
+
+    try {
+      if (navigator.share) {
         await navigator.share({
           title: selectedComponent.name,
           text: selectedComponent.description,
           url,
         });
-      } catch (error) {
-        // User cancelled sharing - no need to handle
+        toast.success("Shared successfully!");
+      } else {
+        await navigator.clipboard.writeText(url);
+        toast.success("Link copied to clipboard!", {
+          description: "Share this link with others to view the component.",
+        });
       }
-    } else {
-      await navigator.clipboard.writeText(url);
-      toast.success("Link copied to clipboard!", {
-        description: "Share this link with others to view the component.",
-      });
+    } catch (error) {
+      // Don't show error if user cancelled the share dialog
+      if ((error as Error).name !== 'AbortError') {
+        console.error('Share failed:', error);
+        toast.error("Sharing failed", {
+          description: "Please copy the URL manually to share.",
+        });
+      }
     }
   }, [selectedComponent]);
 
